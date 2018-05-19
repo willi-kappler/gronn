@@ -1,0 +1,15 @@
+{
+    "num_of_input_nodes": 4,
+    "num_of_output_nodes": 3,
+    "initial_network_size": 1,
+    "max_network_size": 50,
+    "num_of_node_mutation": 100,
+    "num_of_iterations": 1000,
+    "num_of_batch_iterations": 100,
+    "batch_size": 50,
+    "num_of_cycles": 2,
+    "use_trained_networks": false,
+    "node_threshold": 0.5,
+    "desired_error": 0.0,
+    "num_of_threads": 4
+}

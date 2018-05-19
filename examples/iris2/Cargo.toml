@@ -1,0 +1,9 @@
+[package]
+name = "iris2"
+version = "0.1.0"
+authors = ["Willi Kappler <grandor@gmx.de>"]
+
+[dependencies]
+log = "0.4"
+simplelog = "0.5"
+gronn = { path = "../../", version = "0.1" }
