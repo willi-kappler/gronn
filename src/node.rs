@@ -77,12 +77,12 @@ impl Node {
             AddConnection => {
                 let index = rng.gen_range::<usize>(0, num_of_connections);
 
-                if self.connections.iter.any(|ref connection| connection.index == *index) {
+                if self.connections.iter().any(|ref connection| connection.index == index) {
                     // Index is already in this node's connection list, try a different mutation
                     self.mutate_node(rng, max_connection_index);
                 } else {
                     self.connections.push(Connection {
-                        index: possible_connections[index],
+                        index,
                         weight: rng.gen_range::<f64>(-10.0, 10.0),
                     });
                 }
@@ -99,12 +99,12 @@ impl Node {
             RandomConnectionOne => {
                 let index1 = rng.gen_range::<usize>(0, max_connection_index);
 
-                if self.connections.iter.any(|ref connection| connection.index == *index1) {
+                if self.connections.iter().any(|ref connection| connection.index == index1) {
                     // Index is already in this node's connection list, try a different mutation
                     self.mutate_node(rng, max_connection_index);
                 } else {
                     let index2 = rng.gen_range::<usize>(0, num_of_connections);
-                    self.connections[index2].index = possible_connections[index1];
+                    self.connections[index2].index = index1;
                 }
             }
             RandomConnectionAll => {
