@@ -213,8 +213,9 @@ impl Driver {
 
             self.networks.sort_unstable_by(|n1, n2| n1.best_error.partial_cmp(&n2.best_error).unwrap());
             self.networks.truncate(self.configuration.num_of_networks); // Get rid of worst solutions
-            // Give the second network a chance to improve:
-            self.networks[1].maybe_add_node();
+            // Give a random network the chance to improve:
+            let index = rng.gen_range::<usize>(1, self.networks.len() - 1);
+            self.networks[index].maybe_add_node();
 
             // Try to avoid cloning local optimum over and over again
             if self.networks[0].best_error != self.networks[1].best_error {
