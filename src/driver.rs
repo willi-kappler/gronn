@@ -91,10 +91,13 @@ impl Driver {
             networks.push(network_configurations::xor01(configuration.clone()));
             networks.push(network_configurations::xor02(configuration.clone()));
             networks.push(network_configurations::xor03(configuration.clone()));
+            networks.push(network_configurations::xor04(configuration.clone()));
             networks.push(network_configurations::iris01(configuration.clone()));
             networks.push(network_configurations::iris02(configuration.clone()));
             networks.push(network_configurations::iris03(configuration.clone()));
+            networks.push(network_configurations::iris04(configuration.clone()));
             networks.push(network_configurations::adder01(configuration.clone()));
+            networks.push(network_configurations::adder02(configuration.clone()));
         } else {
             for _ in 0..configuration.num_of_networks {
                 networks.push(Network::new(configuration.clone()));

@@ -24,6 +24,13 @@ pub fn xor03(configuration: DriverConfiguration) -> Network {
     network
 }
 
+pub fn xor04(configuration: DriverConfiguration) -> Network {
+    let property_json = include_str!("trained_networks/xor04.json");
+    let mut network = Network::new_with_property(configuration, serde_json::from_str(property_json).unwrap(), "xor04");
+    network.fix();
+    network
+}
+
 pub fn iris01(configuration: DriverConfiguration) -> Network {
     let property_json = include_str!("trained_networks/iris01.json");
     let mut network = Network::new_with_property(configuration, serde_json::from_str(property_json).unwrap(), "iris01");
@@ -45,9 +52,23 @@ pub fn iris03(configuration: DriverConfiguration) -> Network {
     network
 }
 
+pub fn iris04(configuration: DriverConfiguration) -> Network {
+    let property_json = include_str!("trained_networks/iris04.json");
+    let mut network = Network::new_with_property(configuration, serde_json::from_str(property_json).unwrap(), "iris04");
+    network.fix();
+    network
+}
+
 pub fn adder01(configuration: DriverConfiguration) -> Network {
     let property_json = include_str!("trained_networks/adder01.json");
     let mut network = Network::new_with_property(configuration, serde_json::from_str(property_json).unwrap(), "adder01");
+    network.fix();
+    network
+}
+
+pub fn adder02(configuration: DriverConfiguration) -> Network {
+    let property_json = include_str!("trained_networks/adder02.json");
+    let mut network = Network::new_with_property(configuration, serde_json::from_str(property_json).unwrap(), "adder02");
     network.fix();
     network
 }

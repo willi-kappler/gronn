@@ -1,4 +1,4 @@
-# gronn
+# GRONN
 **GRO**wing **N**eural **N**etwork
 
 Gronn allows you to train data with pre-trained networks. Gronn adapts the network to the problem using an evolutionary algorithm:
