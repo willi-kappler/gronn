@@ -62,23 +62,25 @@ impl Node {
         use self::MutateNodeOperation::*;
         match rng.gen::<MutateNodeOperation>() {
             SwapConnections => {
-                let index1 = rng.gen_range::<usize>(0, num_of_connections);
-                let index2 = rng.gen_range::<usize>(0, num_of_connections);
-                let con_index1 = self.connections[index1].index;
-                let con_index2 = self.connections[index2].index;
-                self.connections[index1].index = con_index2;
-                self.connections[index2].index = con_index1;
+                if num_of_connections > 1 {
+                    let index1 = rng.gen_range::<usize>(0, num_of_connections);
+                    let index2 = rng.gen_range::<usize>(0, num_of_connections);
+                    let con_index1 = self.connections[index1].index;
+                    let con_index2 = self.connections[index2].index;
+                    self.connections[index1].index = con_index2;
+                    self.connections[index2].index = con_index1;
+                } else {
+                    // Need at least two nodes to swap, try a different mutation
+                    self.mutate_node(rng, max_connection_index);
+                }
             }
             AddConnection => {
-                // This is faster than using FnvHashSet:
-                let possible_connections: Vec<usize> = (0..max_connection_index).filter(
-                    |index| !self.connections.iter().any(|ref connection| connection.index == *index)).collect();
+                let index = rng.gen_range::<usize>(0, num_of_connections);
 
-                if possible_connections.is_empty() {
-                    // No more connections available, try a different mutation
+                if self.connections.iter.any(|ref connection| connection.index == *index) {
+                    // Index is already in this node's connection list, try a different mutation
                     self.mutate_node(rng, max_connection_index);
                 } else {
-                    let index = rng.gen_range::<usize>(0, possible_connections.len());
                     self.connections.push(Connection {
                         index: possible_connections[index],
                         weight: rng.gen_range::<f64>(-10.0, 10.0),
