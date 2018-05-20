@@ -10,12 +10,6 @@ enum MutateNodeOperation {
     RemoveConnection,
     RandomConnectionOne,
     RandomConnectionAll,
-    /*
-    MoveBias,
-    ChangeBiasDirection,
-    MoveConnections,
-    ChangeConnectionDirection,
-    */
     DeltaBias,
     RandomBias,
     DeltaWeightOne,
@@ -28,13 +22,11 @@ enum MutateNodeOperation {
 struct Connection {
     index: usize,
     weight: f64,
-    // weight_direction: f64,
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Node {
     bias: f64,
-    // bias_direction: f64,
     connections: Vec<Connection>,
 }
 
@@ -42,12 +34,10 @@ impl Node {
     pub fn new_simple<T: Rng>(rng: &mut T) -> Node {
         Node {
             bias: rng.gen_range::<f64>(-10.0, 10.0),
-            // bias_direction: rng.gen_range::<f64>(-0.01, 0.01),
             connections: vec![
                 Connection {
                     index: 0,
                     weight: rng.gen_range::<f64>(-10.0, 10.0),
-                    // weight_direction: rng.gen_range::<f64>(-0.01, 0.01),
                 }
             ],
         }
@@ -92,13 +82,7 @@ impl Node {
                 }
             }
             AddConnection => {
-                /*
-                let current_connections: FnvHashSet<usize> = self.connections.iter().map(|ref connection| connection.index).collect();
-                let all_connections: FnvHashSet<usize> = (0..max_connection_index).collect();
-                let possible_connections: Vec<usize> = all_connections.difference(&current_connections).map(|index| *index).collect();
-                */
-
-                // This is faster than using FnvHashSet above:
+                // This is faster than using FnvHashSet:
                 let possible_connections: Vec<usize> = (0..max_connection_index).filter(
                     |index| !self.connections.iter().any(|ref connection| connection.index == *index)).collect();
 
@@ -110,7 +94,6 @@ impl Node {
                     self.connections.push(Connection {
                         index: possible_connections[index],
                         weight: rng.gen_range::<f64>(-10.0, 10.0),
-                        // weight_direction: rng.gen_range::<f64>(-0.01, 0.01),
                     });
                 }
             }
@@ -124,13 +107,7 @@ impl Node {
                 }
             }
             RandomConnectionOne => {
-                /*
-                let current_connections: FnvHashSet<usize> = self.connections.iter().map(|ref connection| connection.index).collect();
-                let all_connections: FnvHashSet<usize> = (0..max_connection_index).collect();
-                let possible_connections: Vec<usize> = all_connections.difference(&current_connections).map(|index| *index).collect();
-                */
-
-                // This is faster than using FnvHashSet above:
+                // This is faster than using FnvHashSet:
                 let possible_connections: Vec<usize> = (0..max_connection_index).filter(
                     |index| !self.connections.iter().any(|ref connection| connection.index == *index)).collect();
 
@@ -151,25 +128,6 @@ impl Node {
                     connection.index = index;
                 }
             }
-            /*
-            MoveBias => {
-                self.bias += self.bias_direction;
-            }
-            ChangeBiasDirection => {
-                self.bias_direction = rng.gen_range::<f64>(-0.01, 0.01);
-                self.bias += self.bias_direction;
-            }
-            MoveConnections => {
-                for connection in &mut self.connections {
-                    connection.weight += connection.weight_direction;
-                }
-            }
-            ChangeConnectionDirection => {
-                let index = rng.gen_range::<usize>(0, num_of_connections);
-                self.connections[index].weight_direction = rng.gen_range::<f64>(-0.01, 0.01);
-                self.connections[index].weight += self.connections[index].weight_direction;
-            }
-            */
             DeltaBias => {
                 self.bias += rng.gen_range::<f64>(-0.1, 0.1);
             }

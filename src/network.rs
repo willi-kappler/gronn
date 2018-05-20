@@ -183,12 +183,6 @@ impl Network {
     pub fn reseed(&mut self, seed: [u32; 4]) {
         self.rng.reseed(seed);
     }
-
-    /*
-    pub fn set_node_mutation(&mut self, num_of_node_mutation: usize) {
-        self.configuration.num_of_node_mutation = num_of_node_mutation;
-    }
-    */
 }
 
 #[cfg(test)]

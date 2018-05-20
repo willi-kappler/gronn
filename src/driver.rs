@@ -188,9 +188,6 @@ impl Driver {
                 }
             }
 
-            // info!("input_batch: {:?}", input_batch);
-            // info!("output_batch: {:?}", output_batch);
-
             for network in &mut self.networks {
                 network.reseed([
                     rand::random::<u32>(),
@@ -230,32 +227,6 @@ impl Driver {
             }
 
             self.networks[0].first_place_counter += 1;
-
-            /*
-            if num_of_networks > 5 {
-                for j in 0..(num_of_networks - 5) {
-                    self.networks[j].set_node_mutation(self.configuration.num_of_node_mutation);
-                }
-                self.networks[num_of_networks - 1].set_node_mutation(1);
-                self.networks[num_of_networks - 2].set_node_mutation(5);
-                self.networks[num_of_networks - 3].set_node_mutation(10);
-                self.networks[num_of_networks - 4].set_node_mutation(20);
-                self.networks[num_of_networks - 5].set_node_mutation(50);
-            }
-            */
-
-            /*
-            if num_of_networks > 5 {
-                self.networks[0].set_node_mutation(1);
-                self.networks[1].set_node_mutation(5);
-                self.networks[2].set_node_mutation(10);
-                self.networks[3].set_node_mutation(20);
-                self.networks[4].set_node_mutation(50);
-                for j in 5..num_of_networks {
-                    self.networks[j].set_node_mutation(self.configuration.num_of_node_mutation);
-                }
-            }
-            */
 
             info!("Batch iteration: {} of {}", i, self.configuration.num_of_batch_iterations);
             for network in &self.networks {
