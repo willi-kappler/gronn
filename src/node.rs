@@ -62,24 +62,12 @@ impl Node {
         use self::MutateNodeOperation::*;
         match rng.gen::<MutateNodeOperation>() {
             SwapConnections => {
-                if num_of_connections > 1 {
-                    let index1 = rng.gen_range::<usize>(0, num_of_connections);
-                    let mut index2 = rng.gen_range::<usize>(0, num_of_connections);
-
-                    // Ensure we really have two different connections
-                    while index1 == index2 {
-                        index2 = rng.gen_range::<usize>(0, num_of_connections);
-                    }
-
-                    let con_index1 = self.connections[index1].index;
-                    let con_index2 = self.connections[index2].index;
-
-                    self.connections[index1].index = con_index2;
-                    self.connections[index2].index = con_index1;
-                } else {
-                    // No swap possible, try a different mutation
-                    self.mutate_node(rng, max_connection_index);
-                }
+                let index1 = rng.gen_range::<usize>(0, num_of_connections);
+                let index2 = rng.gen_range::<usize>(0, num_of_connections);
+                let con_index1 = self.connections[index1].index;
+                let con_index2 = self.connections[index2].index;
+                self.connections[index1].index = con_index2;
+                self.connections[index2].index = con_index1;
             }
             AddConnection => {
                 // This is faster than using FnvHashSet:
