@@ -97,15 +97,12 @@ impl Node {
                 }
             }
             RandomConnectionOne => {
-                // This is faster than using FnvHashSet:
-                let possible_connections: Vec<usize> = (0..max_connection_index).filter(
-                    |index| !self.connections.iter().any(|ref connection| connection.index == *index)).collect();
+                let index1 = rng.gen_range::<usize>(0, max_connection_index);
 
-                if possible_connections.is_empty() {
-                    // No more connections available, try a different mutation
+                if self.connections.iter.any(|ref connection| connection.index == *index1) {
+                    // Index is already in this node's connection list, try a different mutation
                     self.mutate_node(rng, max_connection_index);
                 } else {
-                    let index1 = rng.gen_range::<usize>(0, possible_connections.len());
                     let index2 = rng.gen_range::<usize>(0, num_of_connections);
                     self.connections[index2].index = possible_connections[index1];
                 }
