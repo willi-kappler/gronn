@@ -73,7 +73,7 @@ impl Property {
 
         for index in 0..self.nodes.len() {
             if !set_of_used_nodes.contains(&index) {
-                return true;
+                return true
             }
         }
 
