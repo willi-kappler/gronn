@@ -212,6 +212,14 @@ impl Driver {
             });
 
             self.networks.sort_unstable_by(|n1, n2| n1.best_error.partial_cmp(&n2.best_error).unwrap());
+
+            // Move nodes in direction of optimal solution
+            // Use the difference between two different networks
+            for j in 0..(self.networks.len() - 1) {
+                let property = self.networks[j + 1].get_property();
+                self.networks[j].move_nodes(property, &input_batch, &output_batch);
+            }
+
             self.networks.truncate(self.configuration.num_of_networks); // Get rid of worst solutions
             // Give a random network the chance to improve:
             let index = rng.gen_range::<usize>(1, self.networks.len() - 1);
@@ -278,7 +286,12 @@ impl Driver {
     }
 
     pub fn save_network(&self, filename: &str) -> Result<(), Error>  {
-        let serialized = serde_json::to_string(&self.networks[0].get_property())?;
+        self.save_network_with_index(filename, 0)
+    }
+
+    pub fn save_network_with_index(&self, filename: &str, index: usize) -> Result<(), Error>  {
+        assert!(index < self.networks.len());
+        let serialized = serde_json::to_string(&self.networks[index].get_property())?;
 
         let f = File::create(filename)?;
         let mut f = BufWriter::new(f);

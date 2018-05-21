@@ -64,26 +64,43 @@ impl Node {
             SwapConnections => {
                 if num_of_connections > 1 {
                     let index1 = rng.gen_range::<usize>(0, num_of_connections);
-                    let index2 = rng.gen_range::<usize>(0, num_of_connections);
+                    let mut index2 = rng.gen_range::<usize>(0, num_of_connections);
+
+                    // Ensure we really have two different connections
+                    while index1 == index2 {
+                        index2 = rng.gen_range::<usize>(0, num_of_connections);
+                    }
+
                     let con_index1 = self.connections[index1].index;
                     let con_index2 = self.connections[index2].index;
+
                     self.connections[index1].index = con_index2;
                     self.connections[index2].index = con_index1;
                 } else {
-                    // Need at least two nodes to swap, try a different mutation
+                    // No swap possible, try a different mutation
                     self.mutate_node(rng, max_connection_index);
                 }
             }
             AddConnection => {
-                let index = rng.gen_range::<usize>(0, num_of_connections);
+                /*
+                let current_connections: FnvHashSet<usize> = self.connections.iter().map(|ref connection| connection.index).collect();
+                let all_connections: FnvHashSet<usize> = (0..max_connection_index).collect();
+                let possible_connections: Vec<usize> = all_connections.difference(&current_connections).map(|index| *index).collect();
+                */
 
-                if self.connections.iter().any(|ref connection| connection.index == index) {
-                    // Index is already in this node's connection list, try a different mutation
+                // This is faster than using FnvHashSet above:
+                let possible_connections: Vec<usize> = (0..max_connection_index).filter(
+                    |index| !self.connections.iter().any(|ref connection| connection.index == *index)).collect();
+
+                if possible_connections.is_empty() {
+                    // No more connections available, try a different mutation
                     self.mutate_node(rng, max_connection_index);
                 } else {
+                    let index = rng.gen_range::<usize>(0, possible_connections.len());
                     self.connections.push(Connection {
-                        index,
+                        index: possible_connections[index],
                         weight: rng.gen_range::<f64>(-10.0, 10.0),
+                        // weight_direction: rng.gen_range::<f64>(-0.01, 0.01),
                     });
                 }
             }
@@ -97,14 +114,23 @@ impl Node {
                 }
             }
             RandomConnectionOne => {
-                let index1 = rng.gen_range::<usize>(0, max_connection_index);
+                /*
+                let current_connections: FnvHashSet<usize> = self.connections.iter().map(|ref connection| connection.index).collect();
+                let all_connections: FnvHashSet<usize> = (0..max_connection_index).collect();
+                let possible_connections: Vec<usize> = all_connections.difference(&current_connections).map(|index| *index).collect();
+                */
 
-                if self.connections.iter().any(|ref connection| connection.index == index1) {
-                    // Index is already in this node's connection list, try a different mutation
+                // This is faster than using FnvHashSet above:
+                let possible_connections: Vec<usize> = (0..max_connection_index).filter(
+                    |index| !self.connections.iter().any(|ref connection| connection.index == *index)).collect();
+
+                if possible_connections.is_empty() {
+                    // No more connections available, try a different mutation
                     self.mutate_node(rng, max_connection_index);
                 } else {
+                    let index1 = rng.gen_range::<usize>(0, possible_connections.len());
                     let index2 = rng.gen_range::<usize>(0, num_of_connections);
-                    self.connections[index2].index = index1;
+                    self.connections[index2].index = possible_connections[index1];
                 }
             }
             RandomConnectionAll => {
@@ -167,7 +193,32 @@ impl Node {
             set_of_used_nodes.insert(connection.index);
         }
     }
+
+    pub fn move_node_if_equal(&mut self, node: Node) -> bool {
+        let num_of_connections = self.connections.len();
+        if num_of_connections != node.connections.len() {
+            return false
+        }
+
+        for i in 0..num_of_connections {
+            if self.connections[i].index != node.connections[i].index {
+                return false
+            }
+        }
+
+        for i in 0..num_of_connections {
+            let diff = self.connections[i].weight - node.connections[i].weight;
+            self.connections[i].weight += 0.1 * diff;
+        }
+
+        let diff = self.bias - node.bias;
+        self.bias += 0.1 * diff;
+
+        true
+    }
 }
+
+
 
 #[cfg(test)]
 mod test {
