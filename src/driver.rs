@@ -78,7 +78,7 @@ impl Driver {
         assert!(configuration.num_of_input_nodes > 0);
         assert!(configuration.num_of_output_nodes > 0);
         assert!(configuration.initial_network_size > 0);
-        assert!(configuration.max_network_size > configuration.initial_network_size);
+        assert!(configuration.max_network_size >= configuration.initial_network_size);
         assert!(configuration.num_of_networks > 1);
         assert!(configuration.num_of_node_mutation > 0);
         assert!(configuration.batch_size > 0);
@@ -88,16 +88,11 @@ impl Driver {
         let mut networks = Vec::with_capacity(configuration.num_of_networks);
 
         if configuration.use_trained_networks {
-            networks.push(network_configurations::xor01(configuration.clone()));
             networks.push(network_configurations::xor02(configuration.clone()));
-            networks.push(network_configurations::xor03(configuration.clone()));
-            networks.push(network_configurations::xor04(configuration.clone()));
-            networks.push(network_configurations::iris01(configuration.clone()));
-            networks.push(network_configurations::iris02(configuration.clone()));
+            networks.push(network_configurations::xor05(configuration.clone()));
             networks.push(network_configurations::iris03(configuration.clone()));
-            networks.push(network_configurations::iris04(configuration.clone()));
-            networks.push(network_configurations::adder01(configuration.clone()));
-            networks.push(network_configurations::adder02(configuration.clone()));
+            networks.push(network_configurations::adder04(configuration.clone()));
+            networks.push(network_configurations::adder06(configuration.clone()));
         } else {
             for _ in 0..configuration.num_of_networks {
                 networks.push(Network::new(configuration.clone()));
