@@ -29,5 +29,6 @@ TODO:
 - fix time stamp utc -> local time
 - add more examples
 - Change from enum to u8 for mutation operation
+- Update to random 0.5: rand::seq::sample_indices for batches
 
 */
