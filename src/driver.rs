@@ -212,7 +212,8 @@ impl Driver {
             // Use the difference between two different networks
             for j in 0..(self.networks.len() - 1) {
                 let property = self.networks[j + 1].get_property();
-                self.networks[j].move_nodes(property, &input_batch, &output_batch);
+                self.networks[j].move_nodes(&property, &input_batch, &output_batch, 0.2);
+                self.networks[j].move_nodes(&property, &input_batch, &output_batch, -0.2);
             }
 
             self.networks.truncate(self.configuration.num_of_networks); // Get rid of worst solutions

@@ -184,14 +184,14 @@ impl Network {
         self.rng.reseed(seed);
     }
 
-    pub fn move_nodes(&mut self, property: Property, provided_input: &[Vec<f64>], expected_output: &[Vec<f64>]) {
+    pub fn move_nodes(&mut self, property: &Property, provided_input: &[Vec<f64>], expected_output: &[Vec<f64>], direction: f64) {
         let num_of_nodes = self.property.nodes.len();
         if num_of_nodes == property.nodes.len() {
             self.undo_property = self.property.clone();
 
             for i in 0..num_of_nodes {
                 let node = property.nodes[i].clone();
-                if !self.property.nodes[i].move_node_if_equal(node) {
+                if !self.property.nodes[i].move_node_if_equal(node, direction) {
                     return
                 }
             }

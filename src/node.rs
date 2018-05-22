@@ -194,7 +194,7 @@ impl Node {
         }
     }
 
-    pub fn move_node_if_equal(&mut self, node: Node) -> bool {
+    pub fn move_node_if_equal(&mut self, node: Node, direction: f64) -> bool {
         let num_of_connections = self.connections.len();
         if num_of_connections != node.connections.len() {
             return false
@@ -208,11 +208,11 @@ impl Node {
 
         for i in 0..num_of_connections {
             let diff = self.connections[i].weight - node.connections[i].weight;
-            self.connections[i].weight += 0.1 * diff;
+            self.connections[i].weight += direction * diff;
         }
 
         let diff = self.bias - node.bias;
-        self.bias += 0.1 * diff;
+        self.bias += direction * diff;
 
         true
     }
