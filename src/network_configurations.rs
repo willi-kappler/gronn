@@ -16,14 +16,6 @@ pub fn xor05(configuration: DriverConfiguration) -> Network {
     network.fix();
     network
 }
-/*
-pub fn xor03(configuration: DriverConfiguration) -> Network {
-    let property_json = include_str!("trained_networks/xor03.json");
-    let mut network = Network::new_with_property(configuration, serde_json::from_str(property_json).unwrap(), "xor03");
-    network.fix();
-    network
-}
-*/
 pub fn iris03(configuration: DriverConfiguration) -> Network {
     let property_json = include_str!("trained_networks/iris03.json");
     let mut network = Network::new_with_property(configuration, serde_json::from_str(property_json).unwrap(), "iris03");
