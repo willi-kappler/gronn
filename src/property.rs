@@ -16,10 +16,6 @@ enum MutatePropertyOperation {
 pub struct Property {
     pub nodes: Vec<Node>,
     pub output_indices: Vec<usize>,
-    pub swap_nodes: usize,
-    pub swap_output: usize,
-    pub random_output_one: usize,
-    pub random_output_all: usize,
 }
 
 impl Property {
@@ -45,25 +41,21 @@ impl Property {
                 let index1 = rng.gen_range::<usize>(0, num_of_nodes);
                 let index2 = rng.gen_range::<usize>(0, num_of_nodes);
                 self.nodes.swap(index1, index2);
-                self.swap_nodes += 1;
             }
             SwapOutput => {
                 let index1 = rng.gen_range::<usize>(0, num_of_outputs);
                 let index2 = rng.gen_range::<usize>(0, num_of_outputs);
                 self.output_indices.swap(index1, index2);
-                self.swap_output += 1;
             }
             RandomOutputOne => {
                 let index1 = rng.gen_range::<usize>(0, num_of_outputs);
                 let index2 = rng.gen_range::<usize>(0, max_connection_index);
                 self.output_indices[index1] = index2;
-                self.random_output_one += 1;
             }
             RandomOutputAll => {
                 for index in &mut self.output_indices {
                     *index = rng.gen_range::<usize>(0, max_connection_index);
                 }
-                self.random_output_all += 1;
             }
         }
     }

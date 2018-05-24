@@ -38,10 +38,6 @@ impl Network {
         let property = Property {
             nodes,
             output_indices,
-            swap_nodes: 0,
-            swap_output: 0,
-            random_output_one: 0,
-            random_output_all: 0,
         };
 
         Self::new_with_property(configuration, property, "untrained")
@@ -51,10 +47,6 @@ impl Network {
         let undo_property = Property {
             nodes: Vec::new(),
             output_indices: Vec::new(),
-            swap_nodes: 0,
-            swap_output: 0,
-            random_output_one: 0,
-            random_output_all: 0,
         };
 
         let nodes_output_values = vec![0.0; configuration.num_of_input_nodes + property.nodes.len()];
