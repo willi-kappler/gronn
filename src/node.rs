@@ -28,6 +28,18 @@ struct Connection {
 pub struct Node {
     bias: f64,
     connections: Vec<Connection>,
+
+    swap_connection: usize,
+    add_connection: usize,
+    remove_connection: usize,
+    random_connection_one: usize,
+    random_connection_all: usize,
+    delta_bias: usize,
+    random_bias: usize,
+    delta_weight_one: usize,
+    random_weight_one: usize,
+    delta_weight_all: usize,
+    random_weight_all: usize,
 }
 
 impl Node {
@@ -40,6 +52,17 @@ impl Node {
                     weight: rng.gen_range::<f64>(-10.0, 10.0),
                 }
             ],
+            swap_connection: 0,
+            add_connection: 0,
+            remove_connection: 0,
+            random_connection_one: 0,
+            random_connection_all: 0,
+            delta_bias: 0,
+            random_bias: 0,
+            delta_weight_one: 0,
+            random_weight_one: 0,
+            delta_weight_all: 0,
+            random_weight_all: 0,
         }
     }
 
@@ -76,6 +99,8 @@ impl Node {
 
                     self.connections[index1].index = con_index2;
                     self.connections[index2].index = con_index1;
+
+                    self.swap_connection += 1;
                 } else {
                     // No swap possible, try a different mutation
                     self.mutate_node(rng, max_connection_index);
@@ -100,14 +125,15 @@ impl Node {
                     self.connections.push(Connection {
                         index: possible_connections[index],
                         weight: rng.gen_range::<f64>(-10.0, 10.0),
-                        // weight_direction: rng.gen_range::<f64>(-0.01, 0.01),
                     });
+                    self.add_connection += 1;
                 }
             }
             RemoveConnection => {
                 if num_of_connections > 1 {
                     let index = rng.gen_range::<usize>(0, num_of_connections);
                     self.connections.remove(index);
+                    self.remove_connection += 1;
                 } else {
                     // Keep at least one connection, try a different mutation
                     self.mutate_node(rng, max_connection_index);
@@ -131,6 +157,7 @@ impl Node {
                     let index1 = rng.gen_range::<usize>(0, possible_connections.len());
                     let index2 = rng.gen_range::<usize>(0, num_of_connections);
                     self.connections[index2].index = possible_connections[index1];
+                    self.random_connection_one += 1;
                 }
             }
             RandomConnectionAll => {
@@ -140,30 +167,37 @@ impl Node {
                 for (connection, index) in self.connections.iter_mut().zip(possible_connections) {
                     connection.index = index;
                 }
+                self.random_connection_all += 1;
             }
             DeltaBias => {
                 self.bias += rng.gen_range::<f64>(-0.1, 0.1);
+                self.delta_bias += 1;
             }
             RandomBias => {
                 self.bias = rng.gen_range::<f64>(-10.0, 10.0);
+                self.random_bias += 1;
             }
             DeltaWeightOne => {
                 let index = rng.gen_range::<usize>(0, num_of_connections);
                 self.connections[index].weight += rng.gen_range::<f64>(-0.1, 0.1);
+                self.delta_weight_one += 1;
             }
             RandomWeightOne => {
                 let index = rng.gen_range::<usize>(0, num_of_connections);
                 self.connections[index].weight = rng.gen_range::<f64>(-10.0, 10.0);
+                self.random_weight_one += 1;
             }
             DeltaWeightAll => {
                 for connection in &mut self.connections {
                     connection.weight += rng.gen_range::<f64>(-0.1, 0.1);
                 }
+                self.delta_weight_all += 1;
             }
             RandomWeightAll => {
                 for connection in &mut self.connections {
                     connection.weight = rng.gen_range::<f64>(-10.0, 10.0);
                 }
+                self.random_weight_all += 1;
             }
         }
     }
