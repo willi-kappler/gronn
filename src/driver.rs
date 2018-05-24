@@ -238,6 +238,9 @@ impl Driver {
                 info!("Best error: {}, num. of nodes: {}, id: {}, first place: {}", network.best_error, network.num_of_nodes(), network.id, network.first_place_counter);
             }
             info!("-------------------------------------------");
+
+            // let filename = format!("property_{:04}.json", i);
+            // self.save_network(&filename);
         }
 
         let duration = start_time.elapsed();
