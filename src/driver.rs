@@ -239,6 +239,9 @@ impl Driver {
             }
             info!("-------------------------------------------");
 
+            // Add one complete random network
+            self.networks.push(Network::new(self.configuration.clone()));
+
             // let filename = format!("property_{:04}.json", i);
             // self.save_network(&filename);
         }
