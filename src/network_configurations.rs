@@ -11,7 +11,7 @@ pub fn xor02(configuration: DriverConfiguration) -> Network {
 }
 
 pub fn xor05(configuration: DriverConfiguration) -> Network {
-    let property_json = include_str!("trained_networks/xor05.json");
+    let property_json = include_str!("trained_networks/xor05_01.json");
     let mut network = Network::new_with_property(configuration, serde_json::from_str(property_json).unwrap(), "xor05");
     network.fix();
     network
