@@ -217,6 +217,9 @@ impl Driver {
                 self.networks[j].move_nodes(&property, &input_batch, &output_batch, -amount);
             }
 
+            // Re-sort after move_nodes
+            self.networks.sort_unstable_by(|n1, n2| n1.best_error.partial_cmp(&n2.best_error).unwrap());
+
             self.networks.truncate(self.configuration.num_of_networks); // Get rid of worst solutions
             // Give a random network the chance to improve:
             let index = rng.gen_range::<usize>(1, self.networks.len() - 1);
