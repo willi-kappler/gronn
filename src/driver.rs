@@ -276,7 +276,7 @@ impl Driver {
         self.networks.push(network);
     }
 
-    pub fn load_network(&mut self, filename: &str) -> Result<(), Error>  {
+    pub fn load_network(&mut self, filename: &str, id: &str) -> Result<(), Error>  {
         let mut data = String::new();
         let f = File::open(filename)?;
         let mut f = BufReader::new(f);
@@ -284,6 +284,7 @@ impl Driver {
 
         let mut new_network = Network::new(self.configuration.clone());
         new_network.set_property(serde_json::from_str(&data)?);
+        new_network.id = id.to_string();
         new_network.fix();
 
         self.networks.push(new_network);
