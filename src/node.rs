@@ -10,11 +10,17 @@ enum MutateNodeOperation {
     RemoveConnection,
     RandomConnectionOne,
     RandomConnectionAll,
-    DeltaBias,
+    DeltaBias1,
+    DeltaBias2,
+    DeltaBias3,
     RandomBias,
-    DeltaWeightOne,
+    DeltaWeightOne1,
+    DeltaWeightOne2,
+    DeltaWeightOne3,
     RandomWeightOne,
-    DeltaWeightAll,
+    DeltaWeightAll1,
+    DeltaWeightAll2,
+    DeltaWeightAll3,
     RandomWeightAll,
 }
 
@@ -82,13 +88,7 @@ impl Node {
                 }
             }
             AddConnection => {
-                /*
-                let current_connections: FnvHashSet<usize> = self.connections.iter().map(|ref connection| connection.index).collect();
-                let all_connections: FnvHashSet<usize> = (0..max_connection_index).collect();
-                let possible_connections: Vec<usize> = all_connections.difference(&current_connections).map(|index| *index).collect();
-                */
-
-                // This is faster than using FnvHashSet above:
+                // This is faster than using FnvHashSet
                 let possible_connections: Vec<usize> = (0..max_connection_index).filter(
                     |index| !self.connections.iter().any(|ref connection| connection.index == *index)).collect();
 
@@ -113,13 +113,7 @@ impl Node {
                 }
             }
             RandomConnectionOne => {
-                /*
-                let current_connections: FnvHashSet<usize> = self.connections.iter().map(|ref connection| connection.index).collect();
-                let all_connections: FnvHashSet<usize> = (0..max_connection_index).collect();
-                let possible_connections: Vec<usize> = all_connections.difference(&current_connections).map(|index| *index).collect();
-                */
-
-                // This is faster than using FnvHashSet above:
+                // This is faster than using FnvHashSet
                 let possible_connections: Vec<usize> = (0..max_connection_index).filter(
                     |index| !self.connections.iter().any(|ref connection| connection.index == *index)).collect();
 
@@ -140,23 +134,47 @@ impl Node {
                     connection.index = index;
                 }
             }
-            DeltaBias => {
-                self.bias += rng.gen_range::<f64>(-0.1, 0.1);
+            DeltaBias1 => {
+                self.bias += rng.gen_range::<f64>(-1.0, 1.0);
+            }
+            DeltaBias2 => {
+                self.bias += rng.gen_range::<f64>(-0.001, 0.001);
+            }
+            DeltaBias3 => {
+                self.bias += rng.gen_range::<f64>(-0.000001, 0.000001);
             }
             RandomBias => {
                 self.bias = rng.gen_range::<f64>(-10.0, 10.0);
             }
-            DeltaWeightOne => {
+            DeltaWeightOne1 => {
                 let index = rng.gen_range::<usize>(0, num_of_connections);
-                self.connections[index].weight += rng.gen_range::<f64>(-0.1, 0.1);
+                self.connections[index].weight += rng.gen_range::<f64>(-1.0, 1.0);
+            }
+            DeltaWeightOne2 => {
+                let index = rng.gen_range::<usize>(0, num_of_connections);
+                self.connections[index].weight += rng.gen_range::<f64>(-0.001, 0.001);
+            }
+            DeltaWeightOne3 => {
+                let index = rng.gen_range::<usize>(0, num_of_connections);
+                self.connections[index].weight += rng.gen_range::<f64>(-0.000001, 0.000001);
             }
             RandomWeightOne => {
                 let index = rng.gen_range::<usize>(0, num_of_connections);
                 self.connections[index].weight = rng.gen_range::<f64>(-10.0, 10.0);
             }
-            DeltaWeightAll => {
+            DeltaWeightAll1 => {
                 for connection in &mut self.connections {
-                    connection.weight += rng.gen_range::<f64>(-0.1, 0.1);
+                    connection.weight += rng.gen_range::<f64>(-1.0, 1.0);
+                }
+            }
+            DeltaWeightAll2 => {
+                for connection in &mut self.connections {
+                    connection.weight += rng.gen_range::<f64>(-0.001, 0.001);
+                }
+            }
+            DeltaWeightAll3 => {
+                for connection in &mut self.connections {
+                    connection.weight += rng.gen_range::<f64>(-0.000001, 0.000001);
                 }
             }
             RandomWeightAll => {
