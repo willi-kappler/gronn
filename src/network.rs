@@ -191,6 +191,7 @@ impl Network {
             for i in 0..num_of_nodes {
                 let node = property.nodes[i].clone();
                 if !self.property.nodes[i].move_node_if_equal(node, direction) {
+                    self.property = self.undo_property.clone();
                     return
                 }
             }

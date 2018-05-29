@@ -210,7 +210,7 @@ impl Driver {
 
             // Move nodes in direction of optimal solution
             // Use the difference between two different networks
-            let amount = rng.gen_range::<f64>(0.01, 0.1);
+            let amount = 0.5;
             for j in 0..(self.networks.len() - 1) {
                 let property = self.networks[j + 1].get_property();
                 self.networks[j].move_nodes(&property, &input_batch, &output_batch, amount);
