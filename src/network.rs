@@ -182,30 +182,6 @@ impl Network {
     pub fn reseed(&mut self, seed: [u32; 4]) {
         self.rng.reseed(seed);
     }
-
-    pub fn move_nodes(&mut self, property: &Property, provided_input: &[Vec<f64>], expected_output: &[Vec<f64>], direction: f64) {
-        let num_of_nodes = self.property.nodes.len();
-        if num_of_nodes == property.nodes.len() {
-            self.undo_property = self.property.clone();
-
-            for i in 0..num_of_nodes {
-                let node = property.nodes[i].clone();
-                if !self.property.nodes[i].move_node_if_equal(node, direction) {
-                    self.property = self.undo_property.clone();
-                    return
-                }
-            }
-
-            let batch_error = self.calculate_batch_and_error(provided_input, expected_output);
-
-            if batch_error < self.best_error {
-                // Better solution found
-                self.best_error = batch_error;
-            } else {
-                self.property = self.undo_property.clone();
-            }
-        }
-    }
 }
 
 #[cfg(test)]

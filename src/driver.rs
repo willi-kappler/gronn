@@ -207,19 +207,6 @@ impl Driver {
             });
 
             self.networks.sort_unstable_by(|n1, n2| n1.best_error.partial_cmp(&n2.best_error).unwrap());
-
-            // Move nodes in direction of optimal solution
-            // Use the difference between two different networks
-            let amount = 0.5;
-            for j in 0..(self.networks.len() - 1) {
-                let property = self.networks[j + 1].get_property();
-                self.networks[j].move_nodes(&property, &input_batch, &output_batch, amount);
-                self.networks[j].move_nodes(&property, &input_batch, &output_batch, -amount);
-            }
-
-            // Re-sort after move_nodes
-            self.networks.sort_unstable_by(|n1, n2| n1.best_error.partial_cmp(&n2.best_error).unwrap());
-
             self.networks.truncate(self.configuration.num_of_networks); // Get rid of worst solutions
             // Give a random network the chance to improve:
             let index = rng.gen_range::<usize>(1, self.networks.len() - 1);
@@ -241,9 +228,6 @@ impl Driver {
                 info!("Best error: {}, num. of nodes: {}, id: {}, first place: {}", network.best_error, network.num_of_nodes(), network.id, network.first_place_counter);
             }
             info!("-------------------------------------------");
-
-            // Add one complete random network
-            self.networks.push(Network::new(self.configuration.clone()));
 
             // let filename = format!("property_{:04}.json", i);
             // self.save_network(&filename);

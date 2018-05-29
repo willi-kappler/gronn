@@ -210,29 +210,6 @@ impl Node {
             set_of_used_nodes.insert(connection.index);
         }
     }
-
-    pub fn move_node_if_equal(&mut self, node: Node, direction: f64) -> bool {
-        let num_of_connections = self.connections.len();
-        if num_of_connections != node.connections.len() {
-            return false
-        }
-
-        for i in 0..num_of_connections {
-            if self.connections[i].index != node.connections[i].index {
-                return false
-            }
-        }
-
-        for i in 0..num_of_connections {
-            let diff = self.connections[i].weight - node.connections[i].weight;
-            self.connections[i].weight += direction * diff;
-        }
-
-        let diff = self.bias - node.bias;
-        self.bias += direction * diff;
-
-        true
-    }
 }
 
 
