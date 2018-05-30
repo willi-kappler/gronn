@@ -184,12 +184,7 @@ impl Driver {
             }
 
             for network in &mut self.networks {
-                network.reseed([
-                    rng.gen::<u32>(),
-                    rng.gen::<u32>(),
-                    rng.gen::<u32>(),
-                    rng.gen::<u32>()
-                ]);
+                network.reseed([rng.gen::<u32>(), rng.gen::<u32>(), rng.gen::<u32>(), rng.gen::<u32>()]);
             }
 
             self.networks.par_iter_mut().for_each(|network| {
