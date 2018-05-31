@@ -31,7 +31,7 @@ pub fn adder04(configuration: DriverConfiguration) -> Network {
 }
 
 pub fn adder06(configuration: DriverConfiguration) -> Network {
-    let property_json = include_str!("trained_networks/adder06_1.json");
+    let property_json = include_str!("trained_networks/adder06.json");
     let mut network = Network::new_with_property(configuration, serde_json::from_str(property_json).unwrap(), "adder06");
     network.fix();
     network
