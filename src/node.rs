@@ -3,6 +3,11 @@ use std::f64;
 use rand::{Rng};
 use fnv::FnvHashSet;
 
+const LIMIT1 : f64 = 1.0;
+const LIMIT2 : f64 = 0.001;
+const LIMIT3 : f64 = 0.00001;
+const LIMIT4 : f64 = 0.0000001;
+
 #[derive(Debug, Copy, Clone, PartialEq, Rand)]
 enum MutateNodeOperation {
     SwapConnections,
@@ -13,14 +18,17 @@ enum MutateNodeOperation {
     DeltaBias1,
     DeltaBias2,
     DeltaBias3,
+    DeltaBias4,
     RandomBias,
     DeltaWeightOne1,
     DeltaWeightOne2,
     DeltaWeightOne3,
+    DeltaWeightOne4,
     RandomWeightOne,
     DeltaWeightAll1,
     DeltaWeightAll2,
     DeltaWeightAll3,
+    DeltaWeightAll4,
     RandomWeightAll,
 }
 
@@ -135,28 +143,35 @@ impl Node {
                 }
             }
             DeltaBias1 => {
-                self.bias += rng.gen_range::<f64>(-1.0, 1.0);
+                self.bias += rng.gen_range::<f64>(-LIMIT1, LIMIT1);
             }
             DeltaBias2 => {
-                self.bias += rng.gen_range::<f64>(-0.001, 0.001);
+                self.bias += rng.gen_range::<f64>(-LIMIT2, LIMIT2);
             }
             DeltaBias3 => {
-                self.bias += rng.gen_range::<f64>(-0.000001, 0.000001);
+                self.bias += rng.gen_range::<f64>(-LIMIT3, LIMIT3);
+            }
+            DeltaBias4 => {
+                self.bias += rng.gen_range::<f64>(-LIMIT4, LIMIT4);
             }
             RandomBias => {
                 self.bias = rng.gen_range::<f64>(-10.0, 10.0);
             }
             DeltaWeightOne1 => {
                 let index = rng.gen_range::<usize>(0, num_of_connections);
-                self.connections[index].weight += rng.gen_range::<f64>(-1.0, 1.0);
+                self.connections[index].weight += rng.gen_range::<f64>(-LIMIT1, LIMIT1);
             }
             DeltaWeightOne2 => {
                 let index = rng.gen_range::<usize>(0, num_of_connections);
-                self.connections[index].weight += rng.gen_range::<f64>(-0.001, 0.001);
+                self.connections[index].weight += rng.gen_range::<f64>(-LIMIT2, LIMIT2);
             }
             DeltaWeightOne3 => {
                 let index = rng.gen_range::<usize>(0, num_of_connections);
-                self.connections[index].weight += rng.gen_range::<f64>(-0.000001, 0.000001);
+                self.connections[index].weight += rng.gen_range::<f64>(-LIMIT3, LIMIT3);
+            }
+            DeltaWeightOne4 => {
+                let index = rng.gen_range::<usize>(0, num_of_connections);
+                self.connections[index].weight += rng.gen_range::<f64>(-LIMIT4, LIMIT4);
             }
             RandomWeightOne => {
                 let index = rng.gen_range::<usize>(0, num_of_connections);
@@ -164,17 +179,22 @@ impl Node {
             }
             DeltaWeightAll1 => {
                 for connection in &mut self.connections {
-                    connection.weight += rng.gen_range::<f64>(-1.0, 1.0);
+                    connection.weight += rng.gen_range::<f64>(-LIMIT1, LIMIT1);
                 }
             }
             DeltaWeightAll2 => {
                 for connection in &mut self.connections {
-                    connection.weight += rng.gen_range::<f64>(-0.001, 0.001);
+                    connection.weight += rng.gen_range::<f64>(-LIMIT2, LIMIT2);
                 }
             }
             DeltaWeightAll3 => {
                 for connection in &mut self.connections {
-                    connection.weight += rng.gen_range::<f64>(-0.000001, 0.000001);
+                    connection.weight += rng.gen_range::<f64>(-LIMIT3, LIMIT3);
+                }
+            }
+            DeltaWeightAll4 => {
+                for connection in &mut self.connections {
+                    connection.weight += rng.gen_range::<f64>(-LIMIT4, LIMIT4);
                 }
             }
             RandomWeightAll => {
