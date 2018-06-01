@@ -59,7 +59,7 @@ impl DriverConfiguration {
     fn num_of_cycles() -> usize {2}
     fn use_trained_networks() -> bool {true}
     fn node_threshold() -> f64 {0.1}
-    fn clone_threshold() -> f64 {0.5}
+    fn clone_threshold() -> f64 {0.9}
     fn desired_error() -> f64 {0.01}
     fn num_of_threads() -> usize {1}
 }
@@ -211,7 +211,7 @@ impl Driver {
             self.networks[index].maybe_add_node();
 
             // Try to avoid cloning local optimum over and over again
-            if self.networks[0].best_error < self.configuration.clone_threshold * self.networks[1].best_error {
+            if self.networks[0].best_error <= self.configuration.clone_threshold * self.networks[1].best_error {
                 // Clone the best solution:
                 let mut new_network = self.networks[0].clone();
                 new_network.first_place_counter = 0;
