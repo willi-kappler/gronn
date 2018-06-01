@@ -44,6 +44,8 @@ pub struct DriverConfiguration {
     pub desired_error: f64,
     #[serde(default="DriverConfiguration::num_of_threads")]
     pub num_of_threads: usize,
+    #[serde(default="DriverConfiguration::batch_output")]
+    pub batch_output: bool,
 }
 
 impl DriverConfiguration {
@@ -62,6 +64,7 @@ impl DriverConfiguration {
     fn clone_threshold() -> f64 {0.9}
     fn desired_error() -> f64 {0.01}
     fn num_of_threads() -> usize {1}
+    fn batch_output() -> bool {false}
 }
 
 #[derive(Debug, Clone)]
@@ -227,8 +230,9 @@ impl Driver {
             }
             info!("-------------------------------------------");
 
-            // let filename = format!("property_{:04}.json", i);
-            // self.save_network(&filename);
+            if self.configuration.batch_output {
+                self.save_network("batch_output.json");
+            }
         }
 
         let duration = start_time.elapsed();
