@@ -1,19 +1,20 @@
 #[macro_use] extern crate log;
-extern crate simplelog;
+extern crate log4rs;
 extern crate gronn;
-
-use std::fs::OpenOptions;
-
-use simplelog::{WriteLogger, LevelFilter};
 
 use gronn::driver::{Driver};
 
 fn main() {
-    WriteLogger::init(
-        // LevelFilter::Debug,
-        LevelFilter::Debug,
-        simplelog::Config{time_format: Some("%Y-%m-%d %H:%M:%S"), .. simplelog::Config::default()},
-        OpenOptions::new().append(true).create(true).open("iris.log").unwrap());
+    let file_logger = log4rs::append::file::FileAppender::builder()
+        .encoder(Box::new(log4rs::encode::pattern::PatternEncoder::new("{d} {l} - {m}{n}")))
+        .build("iris.log").unwrap();
+
+    let config = log4rs::config::Config::builder()
+        .appender(log4rs::config::Appender::builder().build("file_logger", Box::new(file_logger)))
+        .build(log4rs::config::Root::builder().appender("file_logger").build(log::LevelFilter::Info))
+        .unwrap();
+
+    let _log_handle = log4rs::init_config(config).unwrap();
 
     let mut driver = Driver::new_from_file("config.json").unwrap();
 

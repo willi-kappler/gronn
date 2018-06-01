@@ -5,5 +5,5 @@ authors = ["Willi Kappler <grandor@gmx.de>"]
 
 [dependencies]
 log = "0.4"
-simplelog = "0.5"
+log4rs = "0.8"
 gronn = { path = "../../", version = "0.1" }
