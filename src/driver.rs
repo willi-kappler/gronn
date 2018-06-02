@@ -189,10 +189,6 @@ impl Driver {
                 }
             }
 
-            for network in &mut self.networks {
-                network.reseed([rng.gen::<u32>(), rng.gen::<u32>(), rng.gen::<u32>(), rng.gen::<u32>()]);
-            }
-
             self.networks.par_iter_mut().for_each(|network| {
                 // Reset best error for this batch
                 network.reset_best_error(&input_batch, &output_batch);

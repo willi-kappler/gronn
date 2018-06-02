@@ -1,7 +1,7 @@
 use std::f64;
 
 use rand;
-use rand::{XorShiftRng, SeedableRng};
+use rand::{XorShiftRng, SeedableRng, Rng};
 
 use driver::{DriverConfiguration};
 use property::{Property};
@@ -148,6 +148,9 @@ impl Network {
 
         // Revert to previous best solution
         self.property = self.undo_property.clone();
+
+        let mut rng = rand::thread_rng();
+        self.rng.reseed([rng.gen::<u32>(), rng.gen::<u32>(), rng.gen::<u32>(), rng.gen::<u32>()])
     }
 
     pub fn set_property(&mut self, property: Property) {
@@ -177,10 +180,6 @@ impl Network {
 
     pub fn num_of_nodes(&self) -> usize {
         self.property.nodes.len()
-    }
-
-    pub fn reseed(&mut self, seed: [u32; 4]) {
-        self.rng.reseed(seed);
     }
 }
 
