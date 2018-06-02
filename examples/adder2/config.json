@@ -10,6 +10,7 @@
     "num_of_cycles": 2,
     "use_trained_networks": false,
     "node_threshold": 0.5,
+    "clone_threshold": 0.99,
     "desired_error": 0.0,
     "num_of_threads": 4
 }
