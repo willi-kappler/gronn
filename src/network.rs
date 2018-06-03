@@ -1,7 +1,6 @@
 use std::f64;
 
-use rand;
-use rand::{XorShiftRng, SeedableRng, Rng};
+use rand::{self, XorShiftRng, FromEntropy};
 
 use driver::{DriverConfiguration};
 use property::{Property};
@@ -22,12 +21,7 @@ pub struct Network {
 impl Network {
     pub fn new(configuration: DriverConfiguration) -> Network {
         let mut nodes = Vec::with_capacity(configuration.initial_network_size);
-        let mut rng = XorShiftRng::from_seed([
-            rand::random::<u32>(),
-            rand::random::<u32>(),
-            rand::random::<u32>(),
-            rand::random::<u32>()
-        ]);
+        let mut rng = rand::thread_rng();
 
         for _ in 0..configuration.initial_network_size {
             nodes.push(Node::new_simple(&mut rng));
@@ -56,12 +50,7 @@ impl Network {
             property,
             undo_property,
             nodes_output_values,
-            rng: XorShiftRng::from_seed([
-                rand::random::<u32>(),
-                rand::random::<u32>(),
-                rand::random::<u32>(),
-                rand::random::<u32>()
-            ]),
+            rng: XorShiftRng::from_entropy(),
             best_error: f64::MAX,
             id: id.to_string(),
             first_place_counter: 0,
@@ -148,9 +137,6 @@ impl Network {
 
         // Revert to previous best solution
         self.property = self.undo_property.clone();
-
-        let mut rng = rand::thread_rng();
-        self.rng.reseed([rng.gen::<u32>(), rng.gen::<u32>(), rng.gen::<u32>(), rng.gen::<u32>()])
     }
 
     pub fn set_property(&mut self, property: Property) {
@@ -180,6 +166,10 @@ impl Network {
 
     pub fn num_of_nodes(&self) -> usize {
         self.property.nodes.len()
+    }
+
+    pub fn reseed_rng(&mut self) {
+        self.rng = XorShiftRng::from_entropy();
     }
 }
 

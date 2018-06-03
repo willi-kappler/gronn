@@ -4,8 +4,7 @@ use std::f64;
 use std::time::Instant;
 
 use serde_json;
-use rand;
-use rand::{Rng};
+use rand::{self, Rng};
 use failure::Error;
 use rayon::prelude::*;
 
@@ -228,6 +227,11 @@ impl Driver {
 
             if self.configuration.batch_output {
                 self.save_network("batch_output.json");
+            }
+
+            // Reseed PRNG with fresh entropy
+            for network in &mut self.networks {
+                network.reseed_rng();
             }
         }
 

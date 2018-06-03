@@ -4,7 +4,7 @@ use fnv::FnvHashSet;
 use driver::{DriverConfiguration};
 use node::{Node};
 
-#[derive(Debug, Copy, Clone, PartialEq, Rand)]
+#[derive(Debug, Copy, Clone, PartialEq)]
 enum MutatePropertyOperation {
     SwapNodes,
     SwapOutput,
@@ -17,6 +17,13 @@ pub struct Property {
     pub nodes: Vec<Node>,
     pub output_indices: Vec<usize>,
 }
+
+const PROPERTY_OPERATIONS : [MutatePropertyOperation; 4] = [
+    MutatePropertyOperation::SwapNodes,
+    MutatePropertyOperation::SwapOutput,
+    MutatePropertyOperation::RandomOutputOne,
+    MutatePropertyOperation::RandomOutputAll,
+];
 
 impl Property {
     pub fn mutate<T: Rng>(&mut self, rng: &mut T, max_connection_index: usize, node_threshold: f64) {
@@ -36,23 +43,23 @@ impl Property {
         let num_of_outputs = self.output_indices.len();
 
         use self::MutatePropertyOperation::*;
-        match rng.gen::<MutatePropertyOperation>() {
-            SwapNodes => {
+        match rng.choose(&PROPERTY_OPERATIONS).unwrap() {
+            &SwapNodes => {
                 let index1 = rng.gen_range::<usize>(0, num_of_nodes);
                 let index2 = rng.gen_range::<usize>(0, num_of_nodes);
                 self.nodes.swap(index1, index2);
             }
-            SwapOutput => {
+            &SwapOutput => {
                 let index1 = rng.gen_range::<usize>(0, num_of_outputs);
                 let index2 = rng.gen_range::<usize>(0, num_of_outputs);
                 self.output_indices.swap(index1, index2);
             }
-            RandomOutputOne => {
+            &RandomOutputOne => {
                 let index1 = rng.gen_range::<usize>(0, num_of_outputs);
                 let index2 = rng.gen_range::<usize>(0, max_connection_index);
                 self.output_indices[index1] = index2;
             }
-            RandomOutputAll => {
+            &RandomOutputAll => {
                 for index in &mut self.output_indices {
                     *index = rng.gen_range::<usize>(0, max_connection_index);
                 }
