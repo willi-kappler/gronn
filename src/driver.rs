@@ -1,12 +1,13 @@
+use std::fs;
 use std::fs::File;
 use std::io::{Write, Read, BufWriter, BufReader};
 use std::f64;
 use std::time::Instant;
 
-use serde_json;
 use rand::{self, Rng};
 use failure::Error;
 use rayon::prelude::*;
+use toml;
 
 use network::{Network};
 use network_configurations;
@@ -111,7 +112,7 @@ impl Driver {
     }
 
     pub fn new_from_json(data: &str) -> Result<Driver, Error> {
-        let configuration: DriverConfiguration = serde_json::from_str(&data)?;
+        let configuration: DriverConfiguration = toml::from_str(&data)?;
 
         Ok(Self::new_from_config(configuration))
     }
@@ -133,7 +134,7 @@ impl Driver {
         let mut f = BufReader::new(f);
         f.read_to_string(&mut data)?;
 
-        let training_data: TrainingData = serde_json::from_str(&data)?;
+        let training_data: TrainingData = toml::from_str(&data)?;
 
         info!("File loaded successfully");
 
@@ -263,13 +264,10 @@ impl Driver {
     }
 
     pub fn load_network(&mut self, filename: &str, id: &str) -> Result<(), Error>  {
-        let mut data = String::new();
-        let f = File::open(filename)?;
-        let mut f = BufReader::new(f);
-        f.read_to_string(&mut data)?;
+        let data = fs::read_to_string(filename)?;
 
         let mut new_network = Network::new(self.configuration.clone());
-        new_network.set_property(serde_json::from_str(&data)?);
+        new_network.set_property(toml::from_str(&data)?);
         new_network.id = id.to_string();
         new_network.fix();
 
@@ -284,7 +282,7 @@ impl Driver {
 
     pub fn save_network_with_index(&self, filename: &str, index: usize) -> Result<(), Error>  {
         assert!(index < self.networks.len());
-        let serialized = serde_json::to_string(&self.networks[index].get_property())?;
+        let serialized = toml::to_string(&self.networks[index].get_property())?;
 
         let f = File::create(filename)?;
         let mut f = BufWriter::new(f);

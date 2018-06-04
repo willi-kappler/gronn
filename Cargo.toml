@@ -7,15 +7,11 @@ authors = ["Willi Kappler <grandor@gmx.de>"]
 rand = "0.5"
 serde = "1.0"
 serde_derive = "1.0"
-serde_json = "1.0"
 log = "0.4"
 failure = "0.1"
 fnv = "1.0"
 rayon = "1.0"
-
-[dev-dependencies]
-assert_approx_eq = "1.0"
-simplelog = "0.5"
+toml = "0.4"
 
 [profile.release]
 lto = true
