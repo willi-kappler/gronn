@@ -1,0 +1,44 @@
+output_indices = [
+  0
+]
+
+[[nodes]]
+bias = -3.174469082774009
+
+  [[nodes.connections]]
+  index = 3
+  weight = 4.517591409471438
+
+  [[nodes.connections]]
+  index = 4
+  weight = 5.2395744727480285
+
+  [[nodes.connections]]
+  index = 0
+  weight = -8.970136221116736
+
+  [[nodes.connections]]
+  index = 2
+  weight = 8.597429940997669
+
+  [[nodes.connections]]
+  index = 1
+  weight = -8.970135308989716
+
+[[nodes]]
+bias = 0.8199823681500504
+
+  [[nodes.connections]]
+  index = 2
+  weight = -1.8745880955825054
+
+  [[nodes.connections]]
+  index = 4
+  weight = -4.666584781190139
+
+[[nodes]]
+bias = -1.3882234196501437
+
+  [[nodes.connections]]
+  index = 2
+  weight = -7.714603638657499

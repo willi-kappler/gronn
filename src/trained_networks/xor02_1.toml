@@ -1,0 +1,29 @@
+output_indices = [
+  0
+]
+
+[[nodes]]
+bias = -1.5511434893465363
+
+  [[nodes.connections]]
+  index = 1
+  weight = 5.905878047275078
+
+  [[nodes.connections]]
+  index = 2
+  weight = -1.8834024648410221
+
+  [[nodes.connections]]
+  index = 0
+  weight = -5.905878024549125
+
+  [[nodes.connections]]
+  index = 3
+  weight = 3.3572951848225525
+
+[[nodes]]
+bias = 0.978737283027448
+
+  [[nodes.connections]]
+  index = 2
+  weight = -0.5460434212701801

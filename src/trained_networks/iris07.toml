@@ -1,0 +1,164 @@
+output_indices = [
+  0
+]
+
+[[nodes]]
+bias = 1.6610083206012083
+
+  [[nodes.connections]]
+  index = 3
+  weight = -0.5558366953112924
+
+  [[nodes.connections]]
+  index = 8
+  weight = -1.303802291733677
+
+  [[nodes.connections]]
+  index = 2
+  weight = -0.16204148728962411
+
+  [[nodes.connections]]
+  index = 10
+  weight = -0.27596737147166345
+
+[[nodes]]
+bias = 0.47200039903671087
+
+  [[nodes.connections]]
+  index = 9
+  weight = -8.579046453005054
+
+  [[nodes.connections]]
+  index = 10
+  weight = -9.263285628714957
+
+  [[nodes.connections]]
+  index = 4
+  weight = -9.52262311256187
+
+  [[nodes.connections]]
+  index = 7
+  weight = 6.43079734751583
+
+  [[nodes.connections]]
+  index = 6
+  weight = -0.9378274261345508
+
+[[nodes]]
+bias = 1.9643999885090793
+
+  [[nodes.connections]]
+  index = 0
+  weight = -0.2762437887210947
+
+  [[nodes.connections]]
+  index = 3
+  weight = 1.195299906390884
+
+  [[nodes.connections]]
+  index = 5
+  weight = -9.68479867054227
+
+  [[nodes.connections]]
+  index = 6
+  weight = -0.6122105185117259
+
+  [[nodes.connections]]
+  index = 7
+  weight = 4.857226019650078
+
+  [[nodes.connections]]
+  index = 8
+  weight = -5.023748366897189
+
+[[nodes]]
+bias = 0.20839619427151207
+
+  [[nodes.connections]]
+  index = 5
+  weight = -28.575744591289542
+
+  [[nodes.connections]]
+  index = 10
+  weight = -8.133611409138295
+
+  [[nodes.connections]]
+  index = 8
+  weight = 2.6793523746033525
+
+  [[nodes.connections]]
+  index = 3
+  weight = -1.223093976738046
+
+  [[nodes.connections]]
+  index = 2
+  weight = -0.08642624659980104
+
+  [[nodes.connections]]
+  index = 9
+  weight = 2.0442892574235656
+
+  [[nodes.connections]]
+  index = 7
+  weight = 3.3770373034261723
+
+[[nodes]]
+bias = -0.5145441700869214
+
+  [[nodes.connections]]
+  index = 3
+  weight = 0.8325522602766312
+
+  [[nodes.connections]]
+  index = 5
+  weight = -2.410312359326169
+
+  [[nodes.connections]]
+  index = 9
+  weight = -5.8665538639633406
+
+  [[nodes.connections]]
+  index = 7
+  weight = -0.1307320453194714
+
+[[nodes]]
+bias = -8.693756195768941
+
+  [[nodes.connections]]
+  index = 3
+  weight = -2.5266185675076778
+
+  [[nodes.connections]]
+  index = 8
+  weight = 10.91271139395476
+
+  [[nodes.connections]]
+  index = 10
+  weight = -9.013714390360414
+
+  [[nodes.connections]]
+  index = 7
+  weight = 6.069139731166632
+
+  [[nodes.connections]]
+  index = 5
+  weight = -0.9510406927765179
+
+  [[nodes.connections]]
+  index = 4
+  weight = -8.973940312711715
+
+  [[nodes.connections]]
+  index = 1
+  weight = -0.08864886382876652
+
+[[nodes]]
+bias = -2.708345870903769
+
+  [[nodes.connections]]
+  index = 8
+  weight = -6.6547135930365355
+
+  [[nodes.connections]]
+  index = 4
+  weight = 2.895579139393535

@@ -16,7 +16,7 @@ fn main() {
 
     let _log_handle = log4rs::init_config(config).unwrap();
 
-    let mut driver = Driver::new_from_file("config.json").unwrap();
+    let mut driver = Driver::new_from_file("config.toml").unwrap();
 
     let training_data = TrainingData {
         provided_input: vec![
@@ -48,5 +48,5 @@ fn main() {
     info!("Result: {:?} -> 1 0 1", driver.predict(&[1.0, 0.0, 0.0]));
     info!("Result: {:?} -> 0 0 0", driver.predict(&[1.0, 1.0, 1.0]));
 
-    driver.save_network("optimal_configuration.json");
+    driver.save_network("optimal_configuration.toml").unwrap();
 }

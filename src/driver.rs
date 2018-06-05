@@ -282,7 +282,7 @@ impl Driver {
 
     pub fn save_network_with_index(&self, filename: &str, index: usize) -> Result<(), Error>  {
         assert!(index < self.networks.len());
-        let serialized = toml::to_string(&self.networks[index].get_property())?;
+        let serialized = toml::Value::try_from(&self.networks[index].get_property())?.to_string();
 
         let f = File::create(filename)?;
         let mut f = BufWriter::new(f);
