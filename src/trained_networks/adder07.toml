@@ -1,168 +1,174 @@
 output_indices = [
-  0
+  6,
+  3,
+  4
 ]
 
 [[nodes]]
-bias = -6.031848490184092
+bias = -6.0318459632340335
 
   [[nodes.connections]]
   index = 1
-  weight = -1.0331025668516904
+  weight = -1.0331046351531024
 
   [[nodes.connections]]
   index = 2
-  weight = 7.051262519747133
+  weight = 7.05105110667032
 
   [[nodes.connections]]
   index = 4
-  weight = 6.044288497243194
+  weight = 6.044288376596246
 
   [[nodes.connections]]
   index = 3
-  weight = 0.022836172570680928
+  weight = 0.022639854674436185
 
 [[nodes]]
-bias = 0.9762582118648276
+bias = 0.9762573758703104
 
   [[nodes.connections]]
   index = 1
-  weight = 0.3346776254229792
+  weight = 0.3346744975352514
 
   [[nodes.connections]]
   index = 2
-  weight = -1.3414904460480437
+  weight = -1.3346910115641806
 
   [[nodes.connections]]
   index = 3
-  weight = -0.33461669784288006
+  weight = -0.33463960525354586
 
   [[nodes.connections]]
   index = 6
-  weight = -1.3844859354889538
+  weight = -1.3822696289343437
 
   [[nodes.connections]]
   index = 5
-  weight = -0.04173987435485369
+  weight = -0.04262482577936848
 
 [[nodes]]
-bias = -4.123661903201313
+bias = -4.123663116370185
 
   [[nodes.connections]]
   index = 9
-  weight = 3.6878410718591264
+  weight = 3.6878459044259753
 
   [[nodes.connections]]
   index = 3
-  weight = -11.044890351942076
+  weight = -11.044892772973729
 
   [[nodes.connections]]
   index = 7
-  weight = -0.7683449615597576
+  weight = -0.7683358008237874
 
   [[nodes.connections]]
   index = 8
-  weight = -6.132103949243615
+  weight = -6.132106547429957
 
   [[nodes.connections]]
   index = 0
-  weight = -2.6261658132536634
+  weight = -2.626150302700548
 
   [[nodes.connections]]
   index = 2
-  weight = 5.334007587068327
+  weight = 5.334005137279613
 
   [[nodes.connections]]
   index = 6
-  weight = 9.90555254355751
+  weight = 9.905385855849048
 
   [[nodes.connections]]
   index = 4
-  weight = -0.5963676936198021
+  weight = -0.5963585576825822
 
 [[nodes]]
-bias = -1.7151315496740225
+bias = -1.7151307788324492
 
   [[nodes.connections]]
   index = 6
-  weight = 7.47383447988826
+  weight = 7.473803782943262
 
   [[nodes.connections]]
   index = 5
-  weight = -3.0841188709427234
+  weight = -3.083683888751218
 
 [[nodes]]
-bias = 4.392055063911226
+bias = 4.392030377127195
 
   [[nodes.connections]]
   index = 2
-  weight = 1.1062954822957338
+  weight = 1.1063814842751891
 
   [[nodes.connections]]
   index = 0
-  weight = -5.702793146106217
+  weight = -5.702713478296321
 
   [[nodes.connections]]
   index = 3
-  weight = 9.80646282817454
+  weight = 9.806401680355103
 
   [[nodes.connections]]
   index = 6
-  weight = -10.280159347637936
-
-  [[nodes.connections]]
-  index = 8
-  weight = -3.965853169323756
+  weight = -10.278330358554301
 
   [[nodes.connections]]
   index = 4
-  weight = 1.588988608979918
+  weight = 1.5889431813692048
+
+  [[nodes.connections]]
+  index = 1
+  weight = 4.743394643582579
+
+  [[nodes.connections]]
+  index = 5
+  weight = -0.002785287281214197
+
+  [[nodes.connections]]
+  index = 9
+  weight = -8.72620008222489
+
+  [[nodes.connections]]
+  index = 8
+  weight = 3.493634414207466
 
   [[nodes.connections]]
   index = 7
-  weight = 3.1520479043517473
-
-  [[nodes.connections]]
-  index = 1
-  weight = 4.7433985571041655
-
-  [[nodes.connections]]
-  index = 9
-  weight = 4.374977671153281
-
-  [[nodes.connections]]
-  index = 5
-  weight = -0.0027913027846306164
+  weight = 3.478754904511491
 
 [[nodes]]
-bias = 10.811054223468737
+bias = 10.812786967336445
 
   [[nodes.connections]]
   index = 4
-  weight = 2.247052699122789
+  weight = 2.2470450986347363
 
   [[nodes.connections]]
   index = 0
-  weight = 5.856330980305737
+  weight = 5.856325967231251
 
   [[nodes.connections]]
   index = 6
-  weight = 2.4271872828573975
+  weight = 2.427144178738474
 
   [[nodes.connections]]
   index = 3
-  weight = 0.654631193169245
+  weight = 0.6546518514043869
 
   [[nodes.connections]]
   index = 5
-  weight = 10.060095023117487
-
-[[nodes]]
-bias = 7.362059438984144
-
-  [[nodes.connections]]
-  index = 1
-  weight = 5.2798848781289465
+  weight = 10.060089233999395
 
   [[nodes.connections]]
   index = 9
-  weight = -4.002784556416206
+  weight = 1.9474650775148648
+
+[[nodes]]
+bias = 7.361410073268034
+
+  [[nodes.connections]]
+  index = 1
+  weight = 5.279840308472723
+
+  [[nodes.connections]]
+  index = 9
+  weight = -9.21041233482417
