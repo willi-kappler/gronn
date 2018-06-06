@@ -143,7 +143,7 @@ impl Driver {
         Ok(())
     }
 
-    pub fn train(&mut self, training_data: &TrainingData) {
+    pub fn train(&mut self, training_data: &TrainingData) -> Result<(), Error> {
         let start_time = Instant::now();
         info!("Begin training");
 
@@ -227,7 +227,7 @@ impl Driver {
             info!("-------------------------------------------");
 
             if self.configuration.batch_output {
-                self.save_network("batch_output.json");
+                self.save_network("batch_output.toml")?;
             }
 
             // Reseed PRNG with fresh entropy
@@ -241,6 +241,7 @@ impl Driver {
         info!("End training");
         info!("Time taken: {} seconds", duration);
         info!("Best error: {}, desired error: {}", self.networks[0].best_error, self.configuration.desired_error);
+        Ok(())
     }
 
     pub fn test(&mut self, provided_input: &[f64], expected_output: &[f64]) -> (f64, Vec<f64>) {
@@ -263,7 +264,7 @@ impl Driver {
         self.networks.push(network);
     }
 
-    pub fn load_network(&mut self, filename: &str, id: &str) -> Result<(), Error>  {
+    pub fn load_network(&mut self, filename: &str, id: &str) -> Result<(), Error> {
         let data = fs::read_to_string(filename)?;
 
         let mut new_network = Network::new(self.configuration.clone());
@@ -276,7 +277,7 @@ impl Driver {
         Ok(())
     }
 
-    pub fn save_network(&self, filename: &str) -> Result<(), Error>  {
+    pub fn save_network(&self, filename: &str) -> Result<(), Error> {
         self.save_network_with_index(filename, 0)
     }
 

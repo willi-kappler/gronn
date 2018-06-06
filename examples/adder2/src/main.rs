@@ -41,7 +41,7 @@ fn main() {
         ],
     };
 
-    driver.train(&training_data);
+    driver.train(&training_data).unwrap();
 
     info!("Result: {:?} -> 0 0 1", driver.predict(&[0.0, 0.0, 0.0]));
     info!("Result: {:?} -> 0 1 1", driver.predict(&[0.0, 1.0, 0.0]));

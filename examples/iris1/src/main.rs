@@ -18,7 +18,7 @@ fn main() {
 
     let mut driver = Driver::new_from_file("config.toml").unwrap();
 
-    driver.train_from_file("iris_data.toml");
+    driver.train_from_file("iris_data.toml").unwrap();
 
     info!("Result: {:?} -> 1", driver.predict(&[5.2,4.1,1.5,0.1]));
     info!("Result: {:?} -> 1", driver.predict(&[5.5,4.2,1.4,0.2]));
