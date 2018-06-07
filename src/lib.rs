@@ -17,7 +17,6 @@ pub mod driver;
 /*
 TODO:
 
-- use TOML instead of JSON ?
 - pass TrainingData and index around instead of provided_input and expected_output
 - add more examples
 - Change from enum to u8 for mutation operation
