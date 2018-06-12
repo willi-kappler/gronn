@@ -1,6 +1,4 @@
-output_indices = [
-  0
-]
+output_indices = [ 0 ]
 
 [[nodes]]
 bias = 1.6610083206012083
