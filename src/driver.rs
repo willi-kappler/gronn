@@ -140,9 +140,7 @@ impl Driver {
 
         info!("File loaded successfully");
 
-        self.train(&training_data);
-
-        Ok(())
+        self.train(&training_data)
     }
 
     pub fn train(&mut self, training_data: &TrainingData) -> Result<(), Error> {
@@ -157,22 +155,7 @@ impl Driver {
 
         info!("Number of entries: {}", input_len);
 
-        let mut input_batch: Vec<Vec<f64>>;
-        let mut output_batch: Vec<Vec<f64>>;
-
-        let change_batch =  if self.configuration.batch_size == input_len {
-            input_batch = training_data.provided_input.clone();
-            output_batch = training_data.expected_output.clone();
-            false
-        } else {
-            input_batch = Vec::with_capacity(self.configuration.batch_size);
-            output_batch = Vec::with_capacity(self.configuration.batch_size);
-            for _ in 0..self.configuration.batch_size {
-                input_batch.push(Vec::new());
-                output_batch.push(Vec::new());
-            }
-            true
-        };
+        let change_batch =  self.configuration.batch_size == input_len;
 
         let mut rng = rand::thread_rng();
 
@@ -182,21 +165,13 @@ impl Driver {
         for i in 0..self.configuration.num_of_batch_iterations {
             if change_batch {
                 rng.shuffle(&mut indices);
-                for j in 0..self.configuration.batch_size {
-                    // TODO: store index and provide training_data to optimize_batch
-                    // let indices: Vec<usize> = (0..input_len).collect();
-                    // rng.shuffle(indices);
-                    // network.optimize_batch(&indices, &training_data);
-                    input_batch[j] = training_data.provided_input[indices[j]].clone();
-                    output_batch[j] = training_data.expected_output[indices[j]].clone();
-                }
             }
 
             self.networks.par_iter_mut().for_each(|network| {
                 // Reset best error for this batch
-                network.reset_best_error(&input_batch, &output_batch);
+                network.reset_best_error(&indices, &training_data);
                 for j in 0..num_of_iterations {
-                    network.optimize_batch(&input_batch, &output_batch);
+                    network.optimize_batch(&indices, &training_data);
 
                     if network.is_good_enough() {
                         // No more training needed for this network

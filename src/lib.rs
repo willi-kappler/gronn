@@ -17,9 +17,7 @@ pub mod driver;
 /*
 TODO:
 
-- pass TrainingData and index around instead of provided_input and expected_output
 - add more examples
 - Change from enum to u8 for mutation operation
-- Update to random 0.5: rand::seq::sample_indices for batches
 
 */

@@ -2,7 +2,7 @@ use std::f64;
 
 use rand::{self, XorShiftRng, FromEntropy};
 
-use driver::{DriverConfiguration};
+use driver::{DriverConfiguration, TrainingData};
 use property::{Property};
 use node::{Node};
 
@@ -90,10 +90,10 @@ impl Network {
         })
     }
 
-    fn calculate_batch_and_error(&mut self, provided_input: &[Vec<f64>], expected_output: &[Vec<f64>]) -> f64 {
-        provided_input.iter().zip(expected_output).fold(0.0, |error, (input, output)| {
-            self.calculate(input);
-            error + self.calculate_error(output)
+    fn calculate_batch_and_error(&mut self, indices: &[usize], training_data: &TrainingData) -> f64 {
+        indices.iter().take(self.configuration.batch_size).fold(0.0, |error, index| {
+            self.calculate(&training_data.provided_input[*index]);
+            error + self.calculate_error(&training_data.expected_output[*index])
         })
     }
 
@@ -119,14 +119,14 @@ impl Network {
         self.property.mutate(&mut self.rng, self.nodes_output_values.len(), self.configuration.node_threshold);
     }
 
-    pub fn optimize_batch(&mut self, provided_input: &[Vec<f64>], expected_output: &[Vec<f64>]) {
+    pub fn optimize_batch(&mut self, indices: &[usize], training_data: &TrainingData) {
         // Initialize
         self.undo_property = self.property.clone();
 
         for _ in 0..self.configuration.num_of_node_mutation {
             self.mutate();
 
-            let batch_error = self.calculate_batch_and_error(provided_input, expected_output);
+            let batch_error = self.calculate_batch_and_error(indices, training_data);
 
             if batch_error < self.best_error {
                 // Better solution found
@@ -156,8 +156,8 @@ impl Network {
         self.nodes_output_values.resize(max_connection_index, 0.0);
     }
 
-    pub fn reset_best_error(&mut self, provided_input: &[Vec<f64>], expected_output: &[Vec<f64>]) {
-        self.best_error = self.calculate_batch_and_error(provided_input, expected_output);
+    pub fn reset_best_error(&mut self, indices: &[usize], training_data: &TrainingData) {
+        self.best_error = self.calculate_batch_and_error(indices, training_data);
     }
 
     pub fn is_good_enough(&mut self) -> bool {
