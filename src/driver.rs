@@ -94,8 +94,10 @@ impl Driver {
         let mut networks = Vec::with_capacity(configuration.num_of_networks);
 
         if configuration.use_trained_networks {
+            /*
             networks.push(network_configurations::xor02(configuration.clone()));
             networks.push(network_configurations::xor05(configuration.clone()));
+            */
             networks.push(network_configurations::iris03(configuration.clone()));
             networks.push(network_configurations::adder04(configuration.clone()));
             networks.push(network_configurations::adder06(configuration.clone()));
@@ -175,17 +177,18 @@ impl Driver {
         let mut rng = rand::thread_rng();
 
         let num_of_iterations = self.configuration.num_of_iterations;
+        let mut indices : Vec<usize> = (0..input_len).collect();
 
         for i in 0..self.configuration.num_of_batch_iterations {
             if change_batch {
+                rng.shuffle(&mut indices);
                 for j in 0..self.configuration.batch_size {
-                    let index = rng.gen_range::<usize>(0, input_len);
-                    // TODO: store index in batch, and provide training_data to optimize_batch
+                    // TODO: store index and provide training_data to optimize_batch
                     // let indices: Vec<usize> = (0..input_len).collect();
                     // rng.shuffle(indices);
-                    // batch[i] = index
-                    input_batch[j] = training_data.provided_input[index].clone();
-                    output_batch[j] = training_data.expected_output[index].clone();
+                    // network.optimize_batch(&indices, &training_data);
+                    input_batch[j] = training_data.provided_input[indices[j]].clone();
+                    output_batch[j] = training_data.expected_output[indices[j]].clone();
                 }
             }
 
