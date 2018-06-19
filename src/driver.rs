@@ -155,7 +155,7 @@ impl Driver {
 
         info!("Number of entries: {}", input_len);
 
-        let change_batch =  self.configuration.batch_size == input_len;
+        let change_batch =  self.configuration.batch_size != input_len;
 
         let mut rng = rand::thread_rng();
 
@@ -164,7 +164,9 @@ impl Driver {
 
         for i in 0..self.configuration.num_of_batch_iterations {
             if change_batch {
+                // info!("indices before: {:?}", indices);
                 rng.shuffle(&mut indices);
+                // info!("indices after: {:?}", indices);
             }
 
             self.networks.par_iter_mut().for_each(|network| {
