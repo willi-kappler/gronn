@@ -164,9 +164,7 @@ impl Driver {
 
         for i in 0..self.configuration.num_of_batch_iterations {
             if change_batch {
-                // info!("indices before: {:?}", indices);
                 rng.shuffle(&mut indices);
-                // info!("indices after: {:?}", indices);
             }
 
             self.networks.par_iter_mut().for_each(|network| {
