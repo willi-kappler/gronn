@@ -1,0 +1,50 @@
+output_indices = [0]
+
+[[nodes]]
+bias = -9.860617695879252
+
+[[nodes.connections]]
+index = 1
+weight = 6.397689056114737
+
+[[nodes.connections]]
+index = 0
+weight = 3.743720425267087
+
+[[nodes.connections]]
+index = 3
+weight = -1.8470937505471827
+
+[[nodes.connections]]
+index = 2
+weight = -0.40039166846384255
+
+[[nodes]]
+bias = 0.030512249867849207
+
+[[nodes.connections]]
+index = 2
+weight = -6.133364519255842
+
+[[nodes.connections]]
+index = 4
+weight = -7.350756001448608
+
+[[nodes]]
+bias = -2.2201715343929096
+
+[[nodes.connections]]
+index = 0
+weight = -6.748196294196268
+
+[[nodes.connections]]
+index = 1
+weight = -8.61765859835981
+
+[[nodes.connections]]
+index = 3
+weight = 4.430945562015716
+
+[[nodes.connections]]
+index = 2
+weight = 5.059717765983044
