@@ -1,0 +1,112 @@
+output_indices = [0]
+
+[[nodes]]
+bias = -0.6146250346799134
+
+[[nodes.connections]]
+index = 0
+weight = 3.2219454822882367
+
+[[nodes.connections]]
+index = 1
+weight = -9.152938709028392
+
+[[nodes.connections]]
+index = 6
+weight = 2.7827535619191135
+
+[[nodes.connections]]
+index = 5
+weight = 8.374451241487566
+
+[[nodes.connections]]
+index = 3
+weight = -4.201484404164676
+
+[[nodes]]
+bias = -1.0448586703582714
+
+[[nodes.connections]]
+index = 1
+weight = 1.971042380099203
+
+[[nodes.connections]]
+index = 0
+weight = -1.0193746693240928
+
+[[nodes.connections]]
+index = 5
+weight = 0.7111365761308758
+
+[[nodes.connections]]
+index = 6
+weight = 0.01958706410654824
+
+[[nodes]]
+bias = 5.177134858463965
+
+[[nodes.connections]]
+index = 1
+weight = -8.976606739656331
+
+[[nodes.connections]]
+index = 0
+weight = -3.6030753986146555
+
+[[nodes.connections]]
+index = 3
+weight = -7.803647925430597
+
+[[nodes.connections]]
+index = 5
+weight = -5.220506339170521
+
+[[nodes.connections]]
+index = 6
+weight = 3.914998378809159
+
+[[nodes]]
+bias = -5.5867535565763955
+
+[[nodes.connections]]
+index = 2
+weight = 3.8528446040551088
+
+[[nodes.connections]]
+index = 3
+weight = 6.5514455160361935
+
+[[nodes.connections]]
+index = 5
+weight = -4.039703948658264
+
+[[nodes.connections]]
+index = 6
+weight = 4.319036564384749
+
+[[nodes]]
+bias = -2.5224562057221727
+
+[[nodes.connections]]
+index = 3
+weight = 0.6788315446728285
+
+[[nodes.connections]]
+index = 5
+weight = -12.486603545801172
+
+[[nodes.connections]]
+index = 4
+weight = 10.871332334007842
+
+[[nodes.connections]]
+index = 0
+weight = 8.8615257899632
+
+[[nodes.connections]]
+index = 2
+weight = -9.40462058644545
+
+[[nodes.connections]]
+index = 6
+weight = 1.5151326817084225
