@@ -20,4 +20,12 @@ TODO:
 - add more examples
 - Change from enum to u8 for mutation operation
 
+- Maybe different data structure:
+    - https://github.com/fitzgen/generational-arena
+    - https://github.com/orlp/slotmap
+    - https://docs.rs/cranelift-entity/0.76.0/cranelift_entity/struct.PrimaryMap.html
+    - https://github.com/petgraph/petgraph
+    - https://github.com/tokio-rs/slab
+    - https://github.com/SimonSapin/rust-typed-arena
+
 */
