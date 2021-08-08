@@ -1,9 +1,0 @@
-[package]
-name = "xor2"
-version = "0.1.0"
-authors = ["Willi Kappler <grandor@gmx.de>"]
-
-[dependencies]
-log = "0.4"
-log4rs = "0.8"
-gronn = { path = "../../", version = "0.1" }
