@@ -30,15 +30,23 @@ impl GNOutputNode {
             result
         }
     }
-    fn add_normal_connection(&mut self, index: usize, weight: f32) {
+    fn add_normal_connection(&mut self, index: usize, weight: f32) -> bool {
         if !self.normal_nodes.contains(&index) {
             self.normal_nodes.push(index);
             self.normal_weights.push(weight);
+            true
+        } else {
+            false
         }
     }
-    fn remove_normal_connection(&mut self, index: usize) {
-        self.normal_nodes.swap_remove(index);
-        self.normal_weights.swap_remove(index);
+    fn remove_normal_connection(&mut self, index: usize) -> bool {
+        if self.normal_nodes.len() > 1 {
+            self.normal_nodes.swap_remove(index);
+            self.normal_weights.swap_remove(index);
+            true
+        } else {
+            false
+        }
     }
     fn replace_normal_weight(&mut self, index: usize, weight: f32) {
         self.normal_weights[index] = weight;
@@ -56,30 +64,38 @@ impl GNOutputNode {
         rng.generate_range(0_usize..self.normal_nodes.len())
     }
     pub(crate) fn mutate(&mut self, nodes_len: usize, rng: &mut WyRand) {
-        let operation = rng.generate_range(0_u8..4);
+        loop {
+            let operation = rng.generate_range(0_u8..4);
 
-        match operation {
-            0 => {
-                let index = rng.generate_range(0_usize..nodes_len);
-                let weight = self.gen_weight(rng);
-                self.add_normal_connection(index, weight);
-            }
-            1 => {
-                let index = self.gen_normal_index(rng);
-                self.remove_normal_connection(index);
-            }
-            2 => {
-                let index = self.gen_normal_index(rng);
-                let weight = self.gen_weight(rng);
-                self.replace_normal_weight(index, weight);
-            }
-            3 => {
-                let index = self.gen_normal_index(rng);
-                let amount = self.gen_amount(rng);
-                self.change_normal_weight(index, amount);
-            }
-            _ => {
-                panic!("Unknown operation in GNOutputNode::mutate: '{}'", operation);
+            match operation {
+                0 => {
+                    let index = rng.generate_range(0_usize..nodes_len);
+                    let weight = self.gen_weight(rng);
+                    if self.add_normal_connection(index, weight) {
+                        break;
+                    }
+                }
+                1 => {
+                    let index = self.gen_normal_index(rng);
+                    if self.remove_normal_connection(index) {
+                        break;
+                    }
+                }
+                2 => {
+                    let index = self.gen_normal_index(rng);
+                    let weight = self.gen_weight(rng);
+                    self.replace_normal_weight(index, weight);
+                    break;
+                }
+                3 => {
+                    let index = self.gen_normal_index(rng);
+                    let amount = self.gen_amount(rng);
+                    self.change_normal_weight(index, amount);
+                    break;
+                }
+                _ => {
+                    panic!("Unknown operation in GNOutputNode::mutate: '{}'", operation);
+                }
             }
         }
     }

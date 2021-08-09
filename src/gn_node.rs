@@ -41,25 +41,41 @@ impl GNNode {
             }
         }
     }
-    fn add_input_connection(&mut self, index: usize, weight: f32) {
+    fn add_input_connection(&mut self, index: usize, weight: f32) -> bool {
         if !self.input_nodes.contains(&index) {
             self.input_nodes.push(index);
             self.input_weights.push(weight);
+            true
+        } else {
+            false
         }
     }
-    fn add_normal_connection(&mut self, index: usize, weight: f32) {
+    fn add_normal_connection(&mut self, index: usize, weight: f32) -> bool {
         if !self.normal_nodes.contains(&index) {
             self.normal_nodes.push(index);
             self.normal_weights.push(weight);
+            true
+        } else {
+            false
         }
     }
-    fn remove_input_connection(&mut self, index: usize) {
-        self.input_nodes.swap_remove(index);
-        self.input_weights.swap_remove(index);
+    fn remove_input_connection(&mut self, index: usize) -> bool {
+        if self.input_nodes.len() > 1 {
+            self.input_nodes.swap_remove(index);
+            self.input_weights.swap_remove(index);
+            true
+        } else {
+            false
+        }
     }
-    fn remove_normal_connection(&mut self, index: usize) {
-        self.normal_nodes.swap_remove(index);
-        self.normal_weights.swap_remove(index);
+    fn remove_normal_connection(&mut self, index: usize) -> bool {
+        if self.normal_nodes.len() > 1 {
+            self.normal_nodes.swap_remove(index);
+            self.normal_weights.swap_remove(index);
+            true
+        } else {
+            false
+        }
     }
     fn replace_input_weight(&mut self, index: usize, weight: f32) {
         self.input_weights[index] = weight;
@@ -87,49 +103,63 @@ impl GNNode {
     }
     pub(crate) fn mutate(&mut self, input_len: usize, nodes_len: usize, rng: &mut WyRand) {
         if !self.unused {
-            let operation = rng.generate_range(0_u8..8);
+            loop {
+                let operation = rng.generate_range(0_u8..8);
 
-            match operation {
-                0 => {
-                    let index = rng.generate_range(0_usize..input_len);
-                    let weight = self.gen_weight(rng);
-                    self.add_input_connection(index, weight);
-                }
-                1 => {
-                    let index = rng.generate_range(0_usize..nodes_len);
-                    let weight = self.gen_weight(rng);
-                    self.add_normal_connection(index, weight);
-                }
-                2 => {
-                    let index = self.gen_input_index(rng);
-                    self.remove_input_connection(index);
-                }
-                3 => {
-                    let index = self.gen_normal_index(rng);
-                    self.remove_normal_connection(index);
-                }
-                4 => {
-                    let index = self.gen_input_index(rng);
-                    let weight = self.gen_weight(rng);
-                    self.replace_input_weight(index, weight);
-                }
-                5 => {
-                    let index = self.gen_normal_index(rng);
-                    let weight = self.gen_weight(rng);
-                    self.replace_normal_weight(index, weight);
-                }
-                6 => {
-                    let index = self.gen_input_index(rng);
-                    let amount = self.gen_amount(rng);
-                    self.change_input_weight(index, amount);
-                }
-                7 => {
-                    let index = self.gen_normal_index(rng);
-                    let amount = self.gen_amount(rng);
-                    self.change_normal_weight(index, amount);
-                }
-                _ => {
-                    panic!("Unknown operation in GNNode::mutate: '{}'", operation);
+                match operation {
+                    0 => {
+                        let index = rng.generate_range(0_usize..input_len);
+                        let weight = self.gen_weight(rng);
+                        if self.add_input_connection(index, weight) {
+                            break;
+                        }
+                    }
+                    1 => {
+                        let index = rng.generate_range(0_usize..nodes_len);
+                        let weight = self.gen_weight(rng);
+                        if self.add_normal_connection(index, weight) {
+                            break;
+                        }
+                    }
+                    2 => {
+                        let index = self.gen_input_index(rng);
+                        if self.remove_input_connection(index) {
+                            break;
+                        }
+                    }
+                    3 => {
+                        let index = self.gen_normal_index(rng);
+                        if self.remove_normal_connection(index) {
+                            break;
+                        }
+                    }
+                    4 => {
+                        let index = self.gen_input_index(rng);
+                        let weight = self.gen_weight(rng);
+                        self.replace_input_weight(index, weight);
+                        break;
+                    }
+                    5 => {
+                        let index = self.gen_normal_index(rng);
+                        let weight = self.gen_weight(rng);
+                        self.replace_normal_weight(index, weight);
+                        break;
+                    }
+                    6 => {
+                        let index = self.gen_input_index(rng);
+                        let amount = self.gen_amount(rng);
+                        self.change_input_weight(index, amount);
+                        break;
+                    }
+                    7 => {
+                        let index = self.gen_normal_index(rng);
+                        let amount = self.gen_amount(rng);
+                        self.change_normal_weight(index, amount);
+                        break;
+                    }
+                    _ => {
+                        panic!("Unknown operation in GNNode::mutate: '{}'", operation);
+                    }
                 }
             }
         }
