@@ -3,6 +3,8 @@
 
 use nanorand::Rng;
 
+use std::rc::Rc;
+
 pub struct GNNode {
     pub(crate) input_nodes: Vec<usize>,
     pub(crate) input_weights: Vec<f32>,
@@ -23,11 +25,11 @@ impl GNNode {
         let mut result = 0.0;
 
         for (input_index, input_weight) in self.input_nodes.iter().zip(self.input_weights) {
-            result += input_values[input_index] * input_weight;
+            result += input_values[*input_index] * input_weight;
         }
 
         for (normal_index, normal_weight) in self.normal_nodes.iter().zip(self.normal_weights) {
-            result += normal_values[normal_index] * normal_weight;
+            result += normal_values[*normal_index] * normal_weight;
         }
 
         // Leaky ReLU
