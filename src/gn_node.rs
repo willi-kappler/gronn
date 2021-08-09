@@ -1,9 +1,6 @@
 
 use nanorand::{WyRand, Rng};
 
-
-// TODO: Add special output node
-
 pub struct GNNode {
     input_nodes: Vec<usize>,
     input_weights: Vec<f32>,
@@ -31,29 +28,29 @@ impl GNNode {
             for (input_index, input_weight) in self.input_nodes.iter().zip(&self.input_weights) {
                 result += input_values[*input_index] * input_weight;
             }
-    
+
             for (normal_index, normal_weight) in self.normal_nodes.iter().zip(&self.normal_weights) {
                 result += normal_values[*normal_index] * normal_weight;
             }
-    
+
             // Leaky ReLU
             if result < 0.0 {
                 result * 0.01
             } else {
                 result
-            }    
+            }
         }
     }
     fn add_input_connection(&mut self, index: usize, weight: f32) {
         if !self.input_nodes.contains(&index) {
             self.input_nodes.push(index);
-            self.input_weights.push(weight);    
+            self.input_weights.push(weight);
         }
     }
     fn add_normal_connection(&mut self, index: usize, weight: f32) {
         if !self.normal_nodes.contains(&index) {
             self.normal_nodes.push(index);
-            self.normal_weights.push(weight);    
+            self.normal_weights.push(weight);
         }
     }
     fn remove_input_connection(&mut self, index: usize) {
@@ -134,34 +131,6 @@ impl GNNode {
                 _ => {
                     panic!("Unknown operation in GNNode::mutate: '{}'", operation);
                 }
-            }
-        }
-    }
-    pub(crate) fn mutate_as_output(&mut self, nodes_len: usize, rng: &mut WyRand) {
-        let operation = rng.generate_range(0_u8..4);
-
-        match operation {
-            0 => {
-                let index = rng.generate_range(0_usize..nodes_len);
-                let weight = self.gen_weight(rng);
-                self.add_normal_connection(index, weight);
-            }
-            1 => {
-                let index = self.gen_normal_index(rng);
-                self.remove_normal_connection(index);
-            }
-            2 => {
-                let index = self.gen_normal_index(rng);
-                let weight = self.gen_weight(rng);
-                self.replace_normal_weight(index, weight);
-            }
-            3 => {
-                let index = self.gen_normal_index(rng);
-                let amount = self.gen_amount(rng);
-                self.change_normal_weight(index, amount);
-            }
-            _ => {
-                panic!("Unknown operation in GNNode::mutate: '{}'", operation);
             }
         }
     }

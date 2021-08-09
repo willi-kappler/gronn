@@ -1,5 +1,6 @@
 
 use crate::gn_node::GNNode;
+use crate::gn_output_node::GNOutputNode;
 
 use nanorand::{WyRand, Rng};
 
@@ -8,7 +9,7 @@ pub struct GNNetwork {
     output_len: usize,
     normal_nodes: Vec<GNNode>,
     normal_values: Vec<f32>,
-    output_nodes: Vec<GNNode>,
+    output_nodes: Vec<GNOutputNode>,
     min_network_size: usize,
     max_network_size: usize,
     add_node_probability: f32,
@@ -21,7 +22,7 @@ impl GNNetwork {
         let mut output_nodes = Vec::new();
 
         for _ in 0..output_len {
-            output_nodes.push(GNNode::new());
+            output_nodes.push(GNOutputNode::new());
         }
 
         let mut normal_nodes = Vec::new();
@@ -49,16 +50,17 @@ impl GNNetwork {
         for node in self.normal_nodes.iter_mut() {
             if node.is_unused() {
                 node.set_unused(false);
-                return false;
+                return true;
             }
         }
 
         if self.normal_nodes.len() < self.max_network_size {
             self.normal_nodes.push(GNNode::new());
-            self.normal_values.push(0.0);    
+            self.normal_values.push(0.0);
+            true
+        } else {
+            false
         }
-
-        true
     }
     fn remove_node(&mut self, rng: &mut WyRand) -> bool {
         let mut nodes_len = 0;
@@ -76,7 +78,7 @@ impl GNNetwork {
             }
 
             self.normal_nodes[index].set_unused(true);
-    
+
             for node in self.normal_nodes.iter_mut() {
                 node.remove_connection_with_index(index);
             }
@@ -88,13 +90,17 @@ impl GNNetwork {
     }
     fn mutate_normal_node(&mut self, rng: &mut WyRand) {
         let nodes_len = self.normal_nodes.len();
-        let index = rng.generate_range(0_usize..nodes_len);
+        let mut index = rng.generate_range(0_usize..nodes_len);
+        while self.normal_nodes[index].is_unused() {
+            index = rng.generate_range(0_usize..nodes_len);
+        }
+
         self.normal_nodes[index].mutate(self.input_len, nodes_len, rng);
     }
     fn mutate_output_node(&mut self, rng: &mut WyRand) {
         let nodes_len = self.output_nodes.len();
         let index = rng.generate_range(0_usize..nodes_len);
-        self.output_nodes[index].mutate_as_output(nodes_len, rng);
+        self.output_nodes[index].mutate(nodes_len, rng);
     }
     fn mutate_node(&mut self, rng: &mut WyRand) {
         let normal_node = rng.generate::<bool>();
@@ -120,31 +126,29 @@ impl GNNetwork {
                 let dice = self.roll_dice(&mut rng);
 
                 if dice < self.add_node_probability {
-                    if !self.add_node() {
-                        self.mutate_node(&mut rng);
+                    if self.add_node() {
+                        return
                     }
-                } else {
-                    self.mutate_node(&mut rng);
                 }
             }
             1 => {
                 let dice = self.roll_dice(&mut rng);
 
                 if dice < self.remove_node_probability {
-                    if !self.remove_node(&mut rng) {
-                        self.mutate_node(&mut rng);
+                    if self.remove_node(&mut rng) {
+                        return
                     }
-                } else {
-                    self.mutate_node(&mut rng);
                 }
             }
             2 => {
-                self.mutate_node(&mut rng);
+                // Mutate node, see below
             }
             _ => {
                 panic!("Unknown operation in GNNetwork::mutate: '{}'", operation);
             }
         }
+
+        self.mutate_node(&mut rng);
     }
     fn calculate_once(&mut self, input_values: &[f32]) {
         for i in 0..self.normal_nodes.len() {
@@ -157,11 +161,11 @@ impl GNNetwork {
             self.calculate_once(input_values);
         }
     }
-    pub(crate) fn error_single(&self, input_values: &[f32], expected_values: &[f32]) -> f32 {
+    pub(crate) fn error_single(&self, expected_values: &[f32]) -> f32 {
         let mut error = 0.0;
 
         for i in 0..self.output_len {
-            let value = self.output_nodes[i].calculate_value(input_values, &self.normal_values);
+            let value = self.output_nodes[i].calculate_value(&self.normal_values);
             error += (value - expected_values[i]).abs();
         }
 
