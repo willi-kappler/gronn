@@ -2,9 +2,16 @@
 name = "gronn"
 version = "0.1.0"
 authors = ["Willi Kappler <grandor@gmx.de>"]
+categories = ["algorithms", "science"]
+description = "Neural Networks using evolutionary algorithm"
+documentation = "https://docs.rs/gronn/"
+edition = "2018"
+keywords = ["neural network", "evolutionary", "algorithm", "EA", "evolution"]
+license = "MIT"
+repository = "https://github.com/willi-kappler/gronn"
+
 
 [dependencies]
-
 log = "0.4"
 thiserror = "1.0"
 serde = { version = "1", features = ["derive"] }
