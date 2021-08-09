@@ -45,11 +45,11 @@ impl GNNetwork {
             calculation_steps: 2,
         }
     }
-    fn add_node(&mut self) {
+    fn add_node(&mut self) -> bool {
         for node in self.normal_nodes.iter_mut() {
             if node.is_unused() {
                 node.set_unused(false);
-                return;
+                return false;
             }
         }
 
@@ -57,17 +57,33 @@ impl GNNetwork {
             self.normal_nodes.push(GNNode::new());
             self.normal_values.push(0.0);    
         }
+
+        true
     }
-    fn remove_node(&mut self, rng: &mut WyRand) {
-        let nodes_len = self.normal_nodes.len();
+    fn remove_node(&mut self, rng: &mut WyRand) -> bool {
+        let mut nodes_len = 0;
+
+        for node in self.normal_nodes.iter() {
+            if !node.is_unused() {
+                nodes_len += 1;
+            }
+        }
 
         if nodes_len > self.min_network_size {
-            let index = rng.generate_range(0_usize..nodes_len);
+            let mut index = rng.generate_range(0_usize..nodes_len);
+            while self.normal_nodes[index].is_unused() {
+                index = rng.generate_range(0_usize..nodes_len);
+            }
+
             self.normal_nodes[index].set_unused(true);
     
             for node in self.normal_nodes.iter_mut() {
                 node.remove_connection_with_index(index);
             }
+
+            true
+        } else {
+            false
         }
     }
     fn mutate_normal_node(&mut self, rng: &mut WyRand) {
@@ -102,7 +118,9 @@ impl GNNetwork {
                 let dice = self.roll_dice(&mut rng);
 
                 if dice < self.add_node_probability {
-                    self.add_node();
+                    if !self.add_node() {
+                        self.mutate_node(&mut rng);
+                    }
                 } else {
                     self.mutate_node(&mut rng);
                 }
@@ -111,7 +129,9 @@ impl GNNetwork {
                 let dice = self.roll_dice(&mut rng);
 
                 if dice < self.remove_node_probability {
-                    self.remove_node(&mut rng);
+                    if !self.remove_node(&mut rng) {
+                        self.mutate_node(&mut rng);
+                    }
                 } else {
                     self.mutate_node(&mut rng);
                 }
