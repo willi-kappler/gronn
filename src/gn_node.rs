@@ -1,8 +1,6 @@
 
 use nanorand::{WyRand, Rng};
 
-use std::rc::Rc;
-
 pub struct GNNode {
     input_nodes: Vec<usize>,
     input_weights: Vec<f32>,
@@ -21,7 +19,7 @@ impl GNNode {
             unused: false,
         }
     }
-    pub(crate) fn calculate_value(&self, input_values: &Rc<Vec<f32>>, normal_values: &[f32]) -> f32 {
+    pub(crate) fn calculate_value(&self, input_values: &[f32], normal_values: &[f32]) -> f32 {
         if self.unused {
             0.0
         } else {
@@ -133,6 +131,34 @@ impl GNNode {
                 _ => {
                     panic!("Unknown operation in GNNode::mutate: '{}'", operation);
                 }
+            }
+        }
+    }
+    pub(crate) fn mutate_as_output(&mut self, nodes_len: usize, rng: &mut WyRand) {
+        let operation = rng.generate_range(0_u8..4);
+
+        match operation {
+            0 => {
+                let index = rng.generate_range(0_usize..nodes_len);
+                let weight = self.gen_weight(rng);
+                self.add_normal_connection(index, weight);
+            }
+            1 => {
+                let index = self.gen_normal_index(rng);
+                self.remove_normal_connection(index);
+            }
+            2 => {
+                let index = self.gen_normal_index(rng);
+                let weight = self.gen_weight(rng);
+                self.replace_normal_weight(index, weight);
+            }
+            3 => {
+                let index = self.gen_normal_index(rng);
+                let amount = self.gen_amount(rng);
+                self.change_normal_weight(index, amount);
+            }
+            _ => {
+                panic!("Unknown operation in GNNode::mutate: '{}'", operation);
             }
         }
     }
