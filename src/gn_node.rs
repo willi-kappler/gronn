@@ -1,6 +1,9 @@
 
 use nanorand::{WyRand, Rng};
 
+
+// TODO: Add special output node
+
 pub struct GNNode {
     input_nodes: Vec<usize>,
     input_weights: Vec<f32>,

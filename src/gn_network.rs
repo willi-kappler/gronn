@@ -113,6 +113,8 @@ impl GNNetwork {
 
         let operation = rng.generate_range(0_u8..3);
 
+        // TODO: use early return and move mutate_node to bottom
+
         match operation {
             0 => {
                 let dice = self.roll_dice(&mut rng);
