@@ -1,7 +1,7 @@
 
 
 
-use nanorand::Rng;
+use nanorand::{WyRand, Rng};
 
 use std::rc::Rc;
 
@@ -24,11 +24,11 @@ impl GNNode {
     pub(crate) fn calculate_value(&self, input_values: &Rc<Vec<f32>>, normal_values: &[f32]) -> f32 {
         let mut result = 0.0;
 
-        for (input_index, input_weight) in self.input_nodes.iter().zip(self.input_weights) {
+        for (input_index, input_weight) in self.input_nodes.iter().zip(&self.input_weights) {
             result += input_values[*input_index] * input_weight;
         }
 
-        for (normal_index, normal_weight) in self.normal_nodes.iter().zip(self.normal_weights) {
+        for (normal_index, normal_weight) in self.normal_nodes.iter().zip(&self.normal_weights) {
             result += normal_values[*normal_index] * normal_weight;
         }
 
@@ -67,19 +67,19 @@ impl GNNode {
     fn change_normal_weight(&mut self, index: usize, amount: f32) {
         self.normal_weights[index] += amount;
     }
-    fn gen_weight(&self, rng: Rng) -> f32 {
+    fn gen_weight(&self, rng: &mut WyRand) -> f32 {
         ((rng.generate_range(0_u16..2000) as f32) - 1000.0) / 100.0
     }
-    fn gen_amount(&self, rng: Rng) -> f32 {
+    fn gen_amount(&self, rng: &mut WyRand) -> f32 {
         ((rng.generate_range(0_u16..2000) as f32) - 1000.0) / 10000.0
     }
-    fn gen_input_index(&self, rng: &Rng) -> usize {
+    fn gen_input_index(&self, rng: &mut WyRand) -> usize {
         rng.generate_range(0_usize..self.input_nodes.len())
     }
-    fn gen_normal_index(&self, rng: &Rng) -> usize {
+    fn gen_normal_index(&self, rng: &mut WyRand) -> usize {
         rng.generate_range(0_usize..self.normal_nodes.len())
     }
-    pub(crate) fn mutate(&mut self, input_len: usize, nodes_len: usize, rng: &Rng) {
+    pub(crate) fn mutate(&mut self, input_len: usize, nodes_len: usize, rng: &mut WyRand) {
         let operation = rng.generate_range(0_u8..8);
 
         match operation {
