@@ -5,8 +5,10 @@ use crate::gn_output_node::GNOutputNode;
 use nanorand::{WyRand, Rng};
 use darwin_rs::{DWIndividual};
 
+use std::cell::RefCell;
+
 pub trait GNDataProvider {
-    fn get_input_output(&self) -> Option<(&[f32], &[f32])>;
+    fn get_input_output(&mut self) -> Option<(&[f32], &[f32])>;
 }
 
 pub struct GNNetwork<T> {
@@ -19,7 +21,7 @@ pub struct GNNetwork<T> {
     add_node_probability: f32,
     remove_node_probability: f32,
     calculation_steps: u8,
-    data_provider: T,
+    data_provider: RefCell<T>,
 }
 
 impl<T: GNDataProvider> GNNetwork<T> {
@@ -45,7 +47,7 @@ impl<T: GNDataProvider> GNNetwork<T> {
             add_node_probability: 0.1,
             remove_node_probability: 0.1,
             calculation_steps: 2,
-            data_provider,
+            data_provider: RefCell::new(data_provider),
         }
     }
     fn add_node(&mut self) -> bool {
@@ -128,7 +130,7 @@ impl<T: GNDataProvider> GNNetwork<T> {
             match operation {
                 0 => {
                     let dice = self.roll_dice(&mut rng);
-    
+
                     if dice < self.add_node_probability {
                         if self.add_node() {
                             break;
@@ -137,7 +139,7 @@ impl<T: GNDataProvider> GNNetwork<T> {
                 }
                 1 => {
                     let dice = self.roll_dice(&mut rng);
-    
+
                     if dice < self.remove_node_probability {
                         if self.remove_node(&mut rng) {
                             break;
@@ -186,8 +188,9 @@ impl<T: GNDataProvider> DWIndividual for GNNetwork<T> {
     fn calculate_fitness(&self) -> f64 {
         let mut error = 0.0;
         let mut node_values= vec![0.0; self.normal_nodes.len()];
+        let mut data_provider = self.data_provider.borrow_mut();
 
-        while let Some((input_values, expected_values)) = self.data_provider.get_input_output() {
+        while let Some((input_values, expected_values)) = data_provider.get_input_output() {
             self.calculate(input_values, &mut node_values);
             error += self.error(expected_values, &node_values);
         }
