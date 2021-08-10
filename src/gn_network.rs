@@ -4,7 +4,7 @@ use crate::gn_output_node::GNOutputNode;
 
 use nanorand::{WyRand, Rng};
 
-pub struct GNNetwork {
+pub struct GNNetwork<T> {
     input_len: usize,
     output_len: usize,
     normal_nodes: Vec<GNNode>,
@@ -15,10 +15,11 @@ pub struct GNNetwork {
     add_node_probability: f32,
     remove_node_probability: f32,
     calculation_steps: u8,
+    input_provider: T,
 }
 
-impl GNNetwork {
-    pub(crate) fn new(input_len: usize, output_len: usize) -> Self {
+impl<'a, T: Iterator<Item=&'a [f32]>> GNNetwork<T> {
+    pub(crate) fn new(input_len: usize, output_len: usize, input_provider: T) -> Self {
         let mut output_nodes = Vec::new();
 
         for _ in 0..output_len {
@@ -44,6 +45,7 @@ impl GNNetwork {
             add_node_probability: 0.1,
             remove_node_probability: 0.1,
             calculation_steps: 2,
+            input_provider,
         }
     }
     fn add_node(&mut self) -> bool {
@@ -150,7 +152,7 @@ impl GNNetwork {
 
         self.mutate_node(&mut rng);
     }
-    fn calculate_once(&mut self, input_values: &[f32]) {
+    fn calculate_single(&mut self, input_values: &[f32]) {
         for i in 0..self.normal_nodes.len() {
             let result = self.normal_nodes[i].calculate_value(input_values, &self.normal_values);
             self.normal_values[i] = result;
@@ -158,15 +160,24 @@ impl GNNetwork {
     }
     pub(crate) fn calculate(&mut self, input_values: &[f32]) {
         for _ in 0..self.calculation_steps {
-            self.calculate_once(input_values);
+            self.calculate_single(input_values);
         }
     }
-    pub(crate) fn error_single(&self, expected_values: &[f32]) -> f32 {
+    fn error_single(&self, expected_values: &[f32]) -> f32 {
         let mut error = 0.0;
 
         for i in 0..self.output_len {
             let value = self.output_nodes[i].calculate_value(&self.normal_values);
             error += (value - expected_values[i]).abs();
+        }
+
+        error
+    }
+    pub(crate) fn error(&mut self) -> f32 {
+        let mut error = 0.0;
+
+        while let Some(data) = self.input_provider.next() {
+            error += self.error_single(data);
         }
 
         error
