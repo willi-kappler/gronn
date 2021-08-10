@@ -84,6 +84,10 @@ impl<T: GNDataProvider> GNNetwork<T> {
                 node.remove_connection_with_index(index);
             }
 
+            for node in self.output_nodes.iter_mut() {
+                node.remove_connection_with_index(index);
+            }
+
             true
         } else {
             false
